@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--titulo-->
+	<title>Perfil</title>
+	<!--icone-->
+    <link rel="icon" type="ico" href="../Favicon.ico" />
+	<!--bootstrap-->
+
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+    <!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="../css/animate.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="../css/font-awesome/css/fontawesome-all.min.css">
+    <!--AngularJS v1.6.9-->
+    <script src="../js/angular.min.js"></script>   
+
+	   <!-- all css here -->
+	   <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+	   <link rel="stylesheet" href="../assets/css/font-awesome.min.css">
+	   <link rel="stylesheet" href="../assets/css/icofont.css">
+	   <link rel="stylesheet" href="../assets/css/meanmenu.min.css">
+	   <link rel="stylesheet" href="../assets/css/slick.css">
+	   <link rel="stylesheet" href="../assets/css/owl.carousel.css">
+	   <link rel="stylesheet" href="../assets/css/magnific-popup.css">
+ 
+	   <link rel="stylesheet" href="../assets/css/shortcode/shortcodes.css">
+	   <link rel="stylesheet" href="../assets/style.css">
+	   <link rel="stylesheet" href="../assets/css/responsive.css">
+	   <script src="../assets/js/vendor/modernizr-2.8.3.min.js"></script>  
+
+
+    <style>
+        body{background-color: #E9E9E9;}
+        #mostrarlogado{display:none;}
+        .btn{margin: 30px 0 20px 0;}
+        #caixa, .avisocaixa {background-color: #ffffff; margin: 8px; padding:30px;}
+        #formparksim{display: none;}
+        #mensagemErro{font-size:16px; text-align:center;color:brown;}
+        .form-inline input {margin:10px;}
+        @media only screen and (max-width: 900px) {
+            #avisocaixa{margin-top:8px !important;}
+            
+        }
+    </style>
+  </head>
+
+<body ng-app="" class="animated fadeIn">
+    <!--header-->
+<ng-include src="'../partes/header.html'"></ng-include>
+
+    <!--aviso para deslogados-->
+    <div class="container" id="avisocaixa">
+        <div class="row centered" id="avisodeslogado"></div>
+    </div>
+
+    <!--conteudo-->
+    <div class="container" id="mostrarlogado">
+
+        <!--dados usuario-->
+        <div class="row" style="padding-top: 20px;">
+        <div class="col-md-6">
+            <h1>Perfil</h1>
+        </div>
+        <div class="col-md-6">
+
+        <li class="media">
+            <div style="float:right; margin-left:10px; border-radius:100px;">
+                <img class="img-circle" src="../img/user.png" width="65px" height="65px" id="fotoUsuario"/>
+            </div>
+            <div class="media-body">
+                <div style="float:right;">
+                <br><h5 class="media-heading" id="nomeUsuario" ></h5>
+                <small id="emailUsuario" ></small>
+                </div>
+            </div>
+        </li>
+            
+        </div>
+        </div><br><br>
+        <!--fim dados usuario-->
+
+        <!--food cadastrado-->
+        <div id="foodCadastrado"></div>
+        <!--cardapio-->
+        <div id="foodCardapio"></div>
+
+        <!--favoritos-->
+        <br><br><h3>Favoritos</h3><br>
+        <div id="mostrarFavPark"></div>
+        <div id="mostrarFavTruck"></div>
+
+    </div><!--fim conteudo-->
+
+    <!--modal editar dados usuario-->
+<div class="modal fade" id="modalEditarUser" tabindex="-1" role="dialog" aria-labelledby="modalEditarUser" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarUser">Editar Food Truck</h5>
+    </div>
+    <form id="formEditarTruck">
+    <div class="modal-body  modal-dialog-centered">
+        <div class="form-group">
+            <label for="displayName">nome</label>
+            <input type="text" class="form-control" id="displayName">
+        </div>
+        <div class="form-group">
+            <label for="userEmail">Email</label>
+            <input type="email" class="form-control" id="userEmail" rows="3"></input>
+        </div>
+        <div id="mensagemEditarUser"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger">Enviar</button>
+    </div>
+    </form>
+    </div>
+    </div>
+    </div>
+
+<!--modal editar imagem user-->
+<div class="modal fade" id="modalEditarImagemUser" tabindex="-1" role="dialog" aria-labelledby="modalEditarImagemUser" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarImagemUser">Editar Imagem</h5>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="fotoUser">Foto do Food User</label>
+            <input type="file" class="form-control-file"  accept="image/*" id="fotoUser">
+        </div>
+        <div id="menEditUserImagem"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="enviarImgUser">Enviar</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    
+
+<!--modal editar food truck-->
+<div class="modal fade" id="modalEditarTruck" tabindex="-1" role="dialog" aria-labelledby="modalEditarTruck" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+    <h5 class="modal-title" id="modalEditarTruck">Editar Food Truck</h5>
+</div>
+<form id="formEditarTruck">
+<div class="modal-body  modal-dialog-centered">
+    <div class="form-group">
+        <label for="truckTel">Telefone</label>
+        <input type="tel" class="form-control" id="truckTel" onkeyup="mascara('(##) #########',this,event,true)" maxlength="14">
+    </div>
+    <div class="form-group">
+        <label for="truckDescricao">Descrição(slogan) do seu Food Truck</label>
+        <textarea class="form-control" id="truckDescricao" rows="3"></textarea>
+    </div>
+    <div id="mensagemEditarTruck"></div>
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-danger">Enviar</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+
+<!--modal editar imagem food truck-->
+<div class="modal fade" id="modalEditarImagemTruck" tabindex="-1" role="dialog" aria-labelledby="modalEditarImagemTruck" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+    <h5 class="modal-title" id="modalEditarImagemTruck">Editar Imagem</h5>
+</div>
+<div class="modal-body">
+    <div class="form-group">
+        <label for="fotoTruck">Foto do Food Truck</label>
+        <input type="file" class="form-control-file"  accept="image/*" id="fotoTruck">
+    </div>
+    <div id="menEditTruckImagem"></div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" id="enviarImgTruck">Enviar</button>
+</div>
+</div>
+</div>
+</div>
+
+
+<!--footer-->
+<ng-include src="'../partes/footer.html'"></ng-include>
+
+ <!-- all js here -->
+ <script src="../assets/js/vendor/jquery-1.12.4.min.js"></script>
+ <script src="../assets/js/bootstrap.min.js"></script>
+ <script src="../assets/js/owl.carousel.min.js"></script>
+ <script src="../assets/js/slick.min.js"></script>
+ <script src="../assets/js/jquery.ajaxchimp.min.js"></script>
+ <script src="../assets/js/plugins.js"></script>
+ <script src="../assets/js/main.js"></script>
+
+
+<!--script de macaras-->
+<script src="../js/mascaras.js"></script> 
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="../js/app.js"></script>
+
+<script>
+
+    //escondendo e exibindo mensagem para deslogados
+    var avisologado = document.getElementById('avisodeslogado');
+
+firebase.auth().onAuthStateChanged(user => {
+if(user){
+    document.getElementById('avisocaixa').style.display = 'none';
+    document.getElementById('mostrarlogado').style.display = 'block';
+
+    //dados usuario
+    document.getElementById('emailUsuario').innerHTML = user.email;
+    if(user.displayName == null){}else{document.getElementById('nomeUsuario').innerHTML = user.displayName;}
+    if(user.photoUrl == null){}else{document.getElementById('fotoUsuario').src = user.photoUrl;}
+
+    //food truck cadastrado
+    var foodCadastrado = document.getElementById('foodCadastrado');
+
+    //ref bd usuarios
+    firebase.database().ref('/usuarios/'+ user.uid).once("value").then(function(bduser) {
+
+        //procurando food trucks
+        firebase.database().ref('/Parks/').once("value", function(dad) {
+        dad.forEach(function (bd) {
+            
+            //favoritos Parks
+            firebase.database().ref('/usuarios/'+ user.uid+'/Favoritos/Parks/').once("value").then(function(bdfavParks) {
+                var favPark = bdfavParks.val();
+				var park = bd.key;
+                    //exibindo favoritos
+                    if(favPark == null){
+                        //não tem food Parks favoritos
+                        mostrarFavPark.innerHTML='<span style="color:red;">Sem Food Parks favoritos!</span>';
+                    }else{
+                        firebase.database().ref('/Parks/'+bd.key+'/perfil/').once("value", function(child) {
+                            var div = document.createElement('div');
+                            div.className = "col-lg-3";
+                            
+                            div.innerHTML = (
+                                '<a href="../foodpark.html?' + bd.key + '">' + 
+                                '<div class="card">' + 
+                                '<img class="card-img-top" src="' + child.val().foto + '" style="height: 250px; width: 100%; display: block;">' + 
+                                '<div class="card-body"><br><h3 class="card-title">' + child.val().nome + '</h3>' + 
+                                '<p class="card-text">'+ child.val().descricao +'</p></a>' + 
+                                '<div class="card-footer">' + 
+                                '<div class="text-center" style="padding:0 0 15px 0;">' + 
+                                '<a href="" id="Parks/'+ bd.key +'" style="color:red;"><i class="fas fa-times"></i> Excluir </a>' +
+                                '</div></div></div></div>'
+
+                            );
+                            mostrarFavPark.appendChild(div);
+
+                            //desfavoritando
+                            var x = document.getElementById(favPark[park]);
+                            x.addEventListener('click', function (e) {
+                                    firebase.database().ref('/usuarios/'+ user.uid + '/Favoritos/Parks/'+bd.key).remove();
+                                    location.reload();                                
+                                })
+                        })
+                    }//fim else parks favoritos
+            })
+        firebase.database().ref('/Parks/'+ bd.key +'/Trucks/').once("value").then(function(bdad) {
+        bdad.forEach(function (banco) {
+        firebase.database().ref('/Parks/'+ bd.key +'/Trucks/'+banco.key).once("value").then(function(child) {
+                    //favoritos Trucks
+                    firebase.database().ref('/usuarios/'+user.uid+'/Favoritos/Trucks/').once("value").then(function(bdfavTrucks) {
+                        var favTruck = bdfavTrucks.val();
+                        var truck = child.key;
+                        //exibindo favoritos
+                        if(favTruck == null){
+                            //não tem food Trucks favoritos
+                            mostrarFavTruck.innerHTML='<span style="color:red;">Sem Food Trucks favoritos!</span>';
+                        }else{
+                                //food truck
+                                var div = document.createElement('div');
+                                div.className = "col-lg-3";
+                                
+                                div.innerHTML = (
+                                    '<a href="../foodtruck.html?'+bd.key+'&'+child.key+'">' + 
+                                    '<div class="card">' + 
+                                    '<img class="card-img-top" src="' + child.val().foto + '" style="height: 250px; width: 100%; display: block;">' + 
+                                    '<div class="card-body"><br><h3 class="card-title">' + child.val().nome + '</h3>' + 
+                                    '<p class="card-text">'+ child.val().descricao +'</p></a>' + 
+                                    '<div class="card-footer">' + 
+                                    '<div class="text-center" style="padding:0 0 15px 0;">' + 
+                                    '<a href="" id="Parks/'+ bd.key +'/Trucks/'+child.key+'" style="color:red;"><i class="fas fa-times"></i> Excluir </a>' +
+                                    '</div></div></div></div>'
+
+                                );
+                                mostrarFavTruck.appendChild(div);
+    
+                                //desfavoritando
+                                var y = document.getElementById(favTruck[truck]);
+                                y.addEventListener('click', function () {
+                                        firebase.database().ref('/usuarios/'+ user.uid + '/Favoritos/Trucks/'+child.key).remove();
+                                        location.reload();                                
+                                    })
+                        }//fim parks favoritos
+            })
+
+            //procurando food truck do usuario
+            if(bduser.val().foodtruck == ''){
+                foodCadastrado.innerHTML = 
+                '<div class="text-center"><a href="../formtruck.html"><span class="btn btn-outline-success my-2 my-sm-0">Cadastre agora seu Food Truck</span></a></div>';
+                }
+
+            if(child.key == bduser.val().foodtruck){
+                var div = document.createElement('div');
+                div.innerHTML = (
+                    '<div class="shadow bg-white" style="padding:30px;"><div class="row"><div class="col-lg-12"><h5><hr>Em '+ bd.key +'<hr></h5></div><div class="col-lg-3">' +
+                    '<img data-toggle="modal" data-target="#modalEditarImagemTruck" class="img-fluid" src="' + child.val().foto + '"/></div><div class="col-lg-9">' +
+                    '<h5>' + child.val().nome + '</h5><hr>' +
+                    '<small><div class="row"><div class="col-lg">' +
+                    '<i class="far fa-user"></i> ' + child.val().nome + 
+                    '<p>' + child.val().descricao + '</p><hr><br>'+
+                    '<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalEditarTruck">Editar</button>'
+                );
+                foodCadastrado.appendChild(div);
+                
+                    //valores nos inputs
+                        document.getElementById('truckTel').value = child.val().telefone;
+                        document.getElementById('truckDescricao').value = child.val().descricao;
+
+                    
+                    var formEditarTruck = document.getElementById('formEditarTruck');
+                    var mensagemEditarTruck = document.getElementById('mensagemEditarTruck');
+                    //##########dados food truck#########
+                    formEditarTruck.addEventListener('submit', function (e) {
+                        // impede o envio do form
+                        e.preventDefault();
+                    
+                        //carregando
+                        mensagemEditarTruck.innerHTML = ('<div class="animated fadeIn">Carregando... <img src="../img/load.gif"/></div>');
+
+                        //enviando para o firebase
+                        var truckDescricao = document.getElementById('truckDescricao').value;
+                        var truckTel = document.getElementById('truckTel').value;
+
+                        console.log('enviou dados para o firebase');
+                        firebase.database().ref('/Parks/'+ bd.key +'/Trucks/'+banco.key).update ({
+                            descricao: truckDescricao,
+                            telefone : truckTel
+                        }).then(function () {
+                                mensagemEditarTruck.innerHTML = ('');
+                                mensagemEditarTruck.innerHTML = ('<div class="alert alert-success"><span class="animated flash">Enviado com sucesso!</span></div>');
+                                console.log('Sucesso');
+                               setTimeout("location.reload();",1000);
+                            })
+                            .catch(function (error) {
+                                mensagemEditarTruck.innerHTML = ('');
+                                mensagemEditarTruck.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao editar imagem!</span></div>');
+                            })
+                            
+                        })//fim form dados Truck
+
+
+                        var enviarImgTruck = document.getElementById('enviarImgTruck');
+                        var menEditTruckImagem = document.getElementById('menEditTruckImagem');
+                        //##########foto food truck#########
+                        enviarImgTruck.addEventListener('click', function (e) {
+                            // impede o envio do form
+                            e.preventDefault();
+                        
+                            //carregando
+                            menEditTruckImagem.innerHTML = ('<div class="animated fadeIn">Carregando... <img src="../img/load.gif"/></div>');
+
+                            //gerando um id para as imagens
+                            var d = new Date();
+                            var id = (d.getFullYear() +''+ d.getMonth() +''+ d.getDate() +''+ d.getHours() +''+ d.getMinutes() +''+ d.getMilliseconds());
+
+                            //enviando foto
+                            var fotoTruck = document.querySelector('#fotoTruck').files[0]
+                            var name = fotoTruck.name;
+                            var metadatafotoTruck = {contentType: fotoTruck.type};
+                            var taskfotoTruck = firebase.storage().ref('/uploads/enviados/' + user.uid + '/' + id + name).put(fotoTruck, metadatafotoTruck);
+                            taskfotoTruck.then((snapshot) => {
+                            var urlfotoTruck = snapshot.downloadURL;
+                            firebase.database().ref('/Parks/'+ bd.key +'/Trucks/'+banco.key).update({
+                                foto: urlfotoTruck 
+                                }).then(function () {
+                                    menEditTruckImagem.innerHTML = ('');
+                                    menEditTruckImagem.innerHTML = ('<div class="alert alert-success"><span class="animated flash">Enviado com sucesso!</span></div>');
+                                    console.log('Sucesso');
+                                    setTimeout("location.reload();",1000);
+                                })
+                                .catch(function (error) {
+                                    menEditTruckImagem.innerHTML = ('');
+                                    menEditTruckImagem.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao carregar imagem!</span></div>');
+                                    console.log('Erro imgtruck: ' + error.message);
+                                    })
+                            })
+                                
+                            })//fim formEditarTruck
+            }else{}//fim if food truck cadastrado
+            
+
+
+        })})})})})//fim procurando food trucks
+
+
+
+
+
+    })//fim ref bduser
+
+
+
+
+
+
+
+/*
+
+                         //gerando um id para as imagens
+                         var d = new Date();
+                        var id = (d.getFullYear() +''+ d.getMonth() +''+ d.getDate() +''+ d.getHours() +''+ d.getMinutes() +''+ d.getMilliseconds());
+
+                        var mensagemEditarTruck = document.getElementById('mensagemEditarTruck');
+                        //enviando foto
+                        var fotoTruck = document.querySelector('#fotoTruck').files[0]
+                        var name = fotoTruck.name;
+                        var metadatafotoTruck = {contentType: fotoTruck.type};
+                        var taskfotoTruck = firebase.storage().ref('/uploads/enviados/' + user.uid + '/' + id + name).put(fotoTruck, metadatafotoTruck);
+                        taskfotoTruck.then((snapshot) => {
+                        var urlfotoTruck = snapshot.downloadURL;
+                        firebase.database().ref('/enviados/truckscomPark/' + user.uid).update({
+                            truckFoto: urlfotoTruck 
+                            }).then(function () {
+                                mensagemEditarTruck.innerHTML = ('');
+                                mensagemEditarTruck.innerHTML = ('<div class="alert alert-success"><span class="animated flash">Enviado com sucesso!</span></div>');
+                                console.log('Sucesso');
+                                formEditarTruck.reset();
+                            })
+                            .catch(function (error) {
+                                mensagemEditarTruck.innerHTML = ('');
+                                mensagemEditarTruck.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao carregar imagem!</span></div>');
+                                console.log('Erro imgtruck: ' + error.message);
+                                })
+                        })
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+}//fim if user
+else{console.log('não logado');
+avisodeslogado.innerHTML = (
+    '<div class="col-md-4"></div><div class="col-md-4 shadow text-center avisocaixa">' +
+    '<div class="text-center"></div><span style="padding-top:50px;">Para ver seu perfil você precisa estar conectado.</span><br><br>' + 
+    '<a href="../app/login.html" style="margin-right: 10px;"><span class="btn btn-success my-2 my-sm-0">Entrar</span></a>' +
+    '<a href="../app/cadastro.html"><span class="btn btn-success my-2 my-sm-0">Cadastro</span></a><br><br>' +
+    '<a href="../index.html">&larr; Página inicial</a></div></div>'
+);
+document.getElementById("avisocaixa").style.marginTop = "50px";
+document.getElementById("avisocaixa").style.marginBottom = "50px";
+}//fim else user
+});//fim user
+
+
+</script>
+
+</body>
+</html>

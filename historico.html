@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--titulo-->
+	<title>Questões</title>
+	<!--icone-->
+    <link rel="icon" type="ico" href="favicon.ico" />
+	<!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-4.1.1/css/bootstrap.min.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+    <script src="css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+    <script src="js/popper.min.js"></script>
+
+	<!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
+  <style>
+      #corpo{
+          margin-top: 50px;
+      }
+      .caixa-graf{
+          background-color: #ccc;
+          height: 300px;
+      }
+      .caixa{
+            padding:20px;
+            margin-bottom: 20px;
+            border:1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+            transition: box-shadow 1s;
+            min-height: 180px;
+            width:100%;
+            cursor: pointer
+        }
+        .caixa:hover{
+            box-shadow: none;
+            transition: box-shadow 1s;
+        }
+  </style>
+</head>
+<body>
+<div id="corpo">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-4">
+                <div id="userQuest" class="caixa-graf"></div>
+                <p>Questões respondidas para total de questoes no banco de dados</p>
+            </div>
+
+            <div class="col-lg-4">
+                <div id="numDisc" class="caixa-graf"></div>
+                <p>Num de questoes respondidas de cada disciplina para o total de respondidas</p>
+            </div>
+
+            <div class="col-lg-4">
+                <div id="mediaQuestoes" class="caixa-graf"></div>
+                <p>Media de questões certas erradas</p>
+            </div>
+
+        </div>
+        <div class="row">
+           
+            <div class="col-lg-4">
+                <div id="mediaNotas" class="caixa-graf"></div>
+                <p>Media de notas do questionario</p>
+            </div>
+
+            <div class="col-lg-8">
+                <div id="mediaDisc" class="caixa-graf"></div>
+                <p>questoes certas para erradas de cada disciplina (colunas meio a meio)</p>
+            </div>
+        </div>
+    </div>
+
+<!--questionarios-->
+    <div class="container">
+        <div class="col-lg-12"> <h2>Questionários</h2> </div>
+        <div class="row" id="caixaQuestio"></div>
+    </div>
+<!--fim questionarios-->
+
+</div><!--fim corpo-->
+
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="js/app.js"></script>
+<script>
+
+        const usuario = 'dyhogenys';
+
+
+
+
+
+
+
+
+
+
+
+
+
+contquestio = 0;
+contquestUser = 0;
+
+firebase.database().ref('/questoes/').once("value", function(contQuest) { //questoes
+    firebase.database().ref('/usuarios/'+usuario+'/historico/').once("value", function(userQuestio) {//questionarios
+    
+ 
+
+           //se questionário não existir
+           if (userQuestio.exists()){} else{ document.getElementById('corpo').innerHTML = '<p style="color:red; margin-left:30px;">Nenhum questionário registrado</p>' }
+
+
+        userQuestio.forEach(function (eQuest) {
+            contquestio++;
+            //console.log(contquestio)
+            //questionarios
+            var div = document.createElement('div');
+            div.className = 'col-lg-6';
+            div.innerHTML = (
+                '<div class="caixa" onclick="redirQues(/'+eQuest.key+'/)"><img src="img/questio.png" height="150px" width="auto" style="float: left; margin-right: 20px;"/>'+ 
+                '<br><h4> '+eQuest.val().nome+'</h4><span><i class="far fa-calendar-check"></i> '+eQuest.val().datahora+'</span>'+
+                '<br><span><i class="far fa-clock"></i> '+eQuest.val().tempo+'</span></div>'
+                );
+            caixaQuestio.appendChild(div);
+
+
+
+
+
+            firebase.database().ref('/usuarios/'+usuario+'/historico/'+eQuest.key+'/questoes/').once("value", function(userQuest) {//questoes do usuario
+            userQuest.forEach(function (foruserQuest) {
+                contquestUser++;
+                  
+                     //console.log(contquestUser)
+                    if(contquestUser == userQuestio.numChildren()){
+                        console.log(contquestUser);
+                        
+                    }
+
+            })//fim for Each questoes do usuario
+        })//fim firebase questoes do usuario
+
+
+        })//fim forEach questionarios
+
+
+
+    
+
+    
+            })//fim firebase questoes
+        
+    })//fim firebase questionarios
+
+//redirecionando para resultado do questionario
+function redirQues(params) {
+    window.location.href = 'historico-questio.html?'+params;
+}
+
+
+function totalQuestoes(banco, user) {
+    document.getElementById('userQuest').innerHTML = banco+' '+user;
+}
+</script>
+
+</body>
+</html>

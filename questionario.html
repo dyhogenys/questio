@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--titulo-->
+	<title>Questões</title>
+	<!--icone-->
+    <link rel="icon" type="ico" href="favicon.ico" />
+	<!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-4.1.1/css/bootstrap.min.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+    <script src="css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+    <script src="js/popper.min.js"></script>
+
+	<!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
+
+    <style>
+        .pergunta > p { display: inline; }
+        .pergunta > h1 { display: inline; }
+        .pergunta > h2 { display: inline; }
+        .pergunta > h3 { display: inline; }
+        .pergunta > h4 { display: inline; }
+        .pergunta > h5 { display: inline; }
+        .pergunta > h6 { display: inline; }
+        .caderno{
+            padding:20px;
+            margin: 20px;
+            border:1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            transition: box-shadow 1s;
+            text-align: center;
+            cursor: pointer;
+        }
+        .caderno > i{
+            font-size:45px;
+            color:blue;
+        }
+        .caderno:hover{
+            box-shadow: none;
+            transition: box-shadow 1s;
+        }
+        #corpo{display:none;}  
+        .corpo-questao{
+            padding:0 35px;
+        }
+        #carregamento{
+            margin-top:45%;
+            display: none;
+        }
+        #mensagemTempo{
+            display: none;
+            color:red;
+            text-align: center;
+            margin-top:100px;
+        }
+        .progress{
+            height: 30px;
+            font-size:14px;
+            font-weight: bolder;
+            margin: 0;
+        }
+        .caixa-contador{
+            font-size:20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 50px;
+            padding: 10px;
+        }
+        .contador{
+            font-size:16px;
+        }
+        #opcoes{
+            margin-top:8px;
+        }     
+        .titdisciplina{
+            background-color: rgba(0, 0, 255, 0.5);
+            padding:3px 8px;
+            color:#fff;
+        }
+                /*carrossel*/
+                .carousel-item {
+            min-height: 400px !important;
+            width:100% !important;
+        }
+        .navega{
+            margin: 20px 0 !important;
+            background-color: transparent !important;
+        }
+        .navega-lista{
+            overflow-x: scroll !important;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -webkit-user-select: none;
+            -moz-user-select: moz-none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .navega-lista::-webkit-scrollbar { 
+            display: none !important;
+        }
+        .navega-lista{
+            -ms-overflow-style: none;
+            overflow: -moz-scrollbars-none;
+        }
+        .carousel-indicators{
+            margin: 0px 0 !important;
+            position:relative !important;
+            bottom: 0 !important;
+        }
+        .carousel-indicators td{
+            cursor: pointer !important;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 15px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 100%;
+            background-color: #fff;
+            text-align: center;
+            font-size: 16px;
+            padding: 3px 6px;
+            margin: 8px 2px;
+            transition: box-shadow 1s;
+            border: 1px solid #ccc;
+        }
+        .carousel-indicators td.active{
+            box-shadow:none;
+            transition: box-shadow 1s;
+            background-color:#ccc;
+            transition: background-color 1s;
+        }
+        .botoes-esquerda{
+            position: relative !important;
+            left: -30px !important;
+            top: -33px !important;
+            padding:38px 15px !important;
+            color:#ccc !important;
+            cursor:pointer !important;
+        }
+        .botoes-direita{
+            position: relative !important;
+            left: 93% !important;
+            top: -33px !important;
+            padding:38px 15px !important;
+            color:#ccc !important;
+            cursor:pointer !important;
+        }
+        .navega-lista > table{
+            border-style:none !important;
+        }
+        .carousel-control-prev{
+            background-color:rgba(0, 128, 0, 0.5);
+            color:#fff;
+            height: 25px;
+            width: 30px;
+            margin-top:200px;
+        }
+        .carousel-control-next{
+            background-color:rgba(0, 128, 0, 0.5);
+            color:#fff;
+            height: 25px;
+            width: 30px;
+            margin-top:200px;
+        }
+        /*fim carrossel*/
+        @media screen and (max-width: 992px) {
+            .caixa{
+                padding:5px;
+            }
+            /*.botoes-direita, .botoes-esquerda{display: none;}*/
+        }
+    </style>
+</head>
+<body>
+
+ <!--menuzinho temporario-->
+ <br>
+ <div class="container">
+     <div class="row text-center">
+         <div class="col-lg-3"></div>
+           <a class="menu col-lg-2" href="cadastro.html"><i class="far fa-edit"> </i> Cadastro</a>
+           <a class="menu col-lg-2" href="questoes.html"><i class="fas fa-archive"> </i> Questões</a>
+           <a class="menu col-lg-2" href="questionario.html"><i class="fas fa-diagnoses"> </i> Questionário</a>
+     </div>
+ </div><br><br>
+ <!--fim menuzinho temporario-->
+
+
+<!--provas-->
+<div class="container" id="cadernos">
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-3 caderno" onclick="comecar('Caderno I - ESS','SAC','2','RAC',2)"> 
+            <img src="img/test.png" width="100%" height="auto">
+            <h5>Caderno I - ESS</h5>
+            <small> SOB	10, </small>
+            <small> EME	7, </small>
+            <small> FOG	3 </small>
+
+        </div>
+        <div class="col-lg-3 caderno" onclick="comecar('Caderno II - RPA','RPA','10','SAC','4','SEG','3','RAC','2','CLT','1')">
+            <img src="img/test.png" width="100%" height="auto">
+            <h5>Caderno II - RPA</h5>
+            <small> RPA	10, </small>
+            <small> SAC	4, </small>
+            <small> SEG	3, </small>
+            <small> RAC	2, </small>
+            <small> CLT	1 </small>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-3 caderno" onclick="comecar('Caderno III - PSS','PSS','20')"> 
+            <img src="img/test.png" width="100%" height="auto">
+            <h5>Caderno III - PSS</h5>
+            <small>PSS 20</small>
+        </div>
+        <div class="col-lg-3 caderno" onclick="comecar('Caderno IV - CGA','CGA','10','NAV','5','MET','5')">
+            <img src="img/test.png" width="100%" height="auto">
+            <h5>Caderno IV - CGA</h5>
+            <small> CGA	10, </small>
+            <small> NAV	5, </small>
+            <small> MET	5 </small>
+
+        </div>
+    </div>
+</div>
+<!--fim provas-->
+
+    <!--carregando-->
+    <div class="container">
+        <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <div id="carregamento">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped  progress-bar-animated" role="progressbar" style="width:10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                        carregando...
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!--fim carregando-->
+
+    <div id="mensagemTempo"><h3>Tempo esgotado!</h3></div>
+
+    <div id="corpo">
+        <div class="container">
+
+        <!--contador-->
+        <div class="row">
+            <div class="col-lg-10">
+                <h5 id="tituloQuestio"></h5>
+            </div>
+            <div class="col-lg-2 text-center caixa-contador">
+                <span id="clock1" class="contador"></span>
+            </div>
+        </div>
+        </div>
+        <!--contador-->
+
+
+        <!--listando questoes-->
+        <div class="container">
+            <h3 id="nome"></h3><!--nome do questionario-->
+            <div id="carrosselquestio" class="carousel slide" data-ride="carousel">
+                <div class="corpo-questao">
+               <!--miniaturas-->
+               <div class="navega">
+                    <div id="lista" class="navega-lista">   
+                    <table>
+                        <!--navegaçãao-->
+                    <tr class="carousel-indicators" id="numNavega"></tr>
+                    </table>
+                    </div>
+                    <!--<div id="botoes" class="botoes">
+                        <span class="botoes-esquerda"><i class="fa fa-angle-left"></i></span>
+                        <span class="botoes-direita"><i class="fa fa-angle-right"></i></span>
+                    </div>-->
+                    </div>
+                    <!-- fim miniaturas-->
+
+
+
+                <div class="carousel-inner">
+                   <!--listando questoes-->
+                    <div id="conteudo"></div>
+
+              </div>
+              </div>
+                    <a class="carousel-control-prev" href="#carrosselquestio" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carrosselquestio" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+
+            </div>
+        <!--fim listando questoes--> 
+
+        <!--botão finalizar-->
+        <div class="text-right">
+            <button type="button" class="btn btn-success" id="botFinal" onclick="finalizar()">Finalizar</button>
+        </div>
+        
+        </div>
+    </div><!--fim corpo-->
+<br><br><br><br>
+
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="js/app.js"></script>
+
+
+<script>
+
+    //pausar carrossel em mobile
+//setInterval(" $('.carousel').carousel('pause');",2000)
+
+
+
+const usuario = 'dyhogenys';
+
+
+cont1=0;cont2=0;cont3=0;cont4=0;cont5=0;contadorGeral=0;
+function comecar(nome,disc1,totalCont1,disc2,totalCont2,disc3,totalCont3,disc4,totalCont4,disc5,totalCont5) {
+
+    document.getElementById('cadernos').style.display = 'none';
+    document.getElementById('carregamento').className = 'animated fadeIn';
+    document.getElementById('carregamento').style.display = 'block';
+
+    //nome
+    document.getElementById('nome').innerHTML = nome;
+
+
+//listando todas as questoes no banco de dados
+var carrega = 0; 
+var totalcarga = 0;
+var carga = 0;
+var cont = 1;
+firebase.database().ref('/questoes/').once("value").then(function(child) {
+    child.forEach(function (d) {
+    firebase.database().ref('/questoes/'+d.key).once("value").then(function(dados) {
+        //carregamento
+        if(cont===1){
+            totalcarga = (child.numChildren());
+            carga = (100/totalcarga);
+            carrega = carga*2;
+            cont++;
+        }else{ carrega += carga; cont++; }
+
+ 
+    //selecionando disciplinas de acordo com a prova
+    if (
+        cont1<totalCont1 && disc1 === dados.val().disciplina ||
+        cont2<totalCont2 && disc2 === dados.val().disciplina ||
+        cont3<totalCont3 && disc3 === dados.val().disciplina ||
+        cont4<totalCont4 && disc4 === dados.val().disciplina ||
+        cont5<totalCont5 && disc5 === dados.val().disciplina
+        ){
+            //contador par que entrar
+            if(disc1 === dados.val().disciplina){ cont1++; }
+            if(disc2 === dados.val().disciplina){ cont2++; }
+            if(disc3 === dados.val().disciplina){ cont3++; }
+            if(disc4 === dados.val().disciplina){ cont4++; }
+            if(disc5 === dados.val().disciplina){ cont5++; }
+            
+    //colocando questoes em uma string
+    var itemsProcessed = 0;
+    var listando = [];
+    var i,p, n, tmp; arr = [];
+
+    firebase.database().ref('/questoes/'+d.key+'/opcoes/').once("value", function(childOpc) {
+    childOpc.forEach(function (g) {
+    firebase.database().ref('/questoes/'+d.key+'/opcoes/'+g.key).once("value", function(dadosOpc) {
+
+        //gerando numeros aleatorios para as opcoes
+        if(itemsProcessed === 0){
+            //contando numero de questoes
+            contadorGeral++;
+
+            for (var i = 0; i < childOpc.numChildren(); i++) {arr[i] = i;}
+            for (p = arr.length; p;) {
+                n = Math.random() * p-- | 0;
+                tmp = arr[n];
+                arr[n] = arr[p];
+                arr[p] = tmp;
+            }
+        }else{}
+
+            //tirando res das respostas
+            if(dadosOpc.key.indexOf("res") != -1){
+                var valOpc = dadosOpc.key.toString().replace("res","");
+                listando[itemsProcessed] = (
+                    '<div class="custom-control custom-'+dados.val().tipo+'">'+
+                    '<input type="'+dados.val().tipo+'" id="'+dados.key+'opc'+valOpc+'" name="'+dados.key+'" value="'+valOpc+'" class="custom-control-input">'+
+                    '<label class="custom-control-label" for="'+dados.key+'opc'+valOpc+'"> '+dadosOpc.val()+'</label></div>'
+                    );
+                itemsProcessed++;
+            }else{
+                //criando lista de questoes
+                listando[itemsProcessed] = (
+                    '<div class="custom-control custom-'+dados.val().tipo+'">'+
+                    '<input type="'+dados.val().tipo+'" id="'+dados.key+'opc'+dadosOpc.key+'" name="'+dados.key+'" value="'+dadosOpc.key+'" class="custom-control-input">'+
+                    '<label class="custom-control-label" for="'+dados.key+'opc'+dadosOpc.key+'"> '+dadosOpc.val()+'</label></div>'
+                    );
+                itemsProcessed++;
+            }
+            
+        //depois de terminar de listar as questao retornando lista completa
+        if(itemsProcessed === childOpc.numChildren()) {
+            //embaralhando opções
+            var listaOpc;
+            for (var i = 0; i < childOpc.numChildren(); i++) {
+                if(i==0){
+                    listaOpc = listando[arr[i]];
+                }else{
+                    listaOpc += listando[arr[i]];
+                }
+            }
+
+            //chamando função passando as opções em string
+            if(contadorGeral===1){ listaQuestoes(listaOpc, 'active', contadorGeral); }
+            else{ listaQuestoes(listaOpc, '', contadorGeral); }
+            
+        }else{}
+
+    })  .catch(function(err) {
+        console.log('erro: '+ err);
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+    })
+})//foreach
+})  .catch(function(err) {
+        console.log('erro: '+ err);
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+    })
+
+//imprimindo questoes
+function listaQuestoes(opc, classe, contador) {
+
+    var numQue = ("0"+(contador)).slice(-2);
+
+    var div = document.createElement('div');
+    div.className = 'carousel-item '+classe;
+    div.innerHTML = (
+        '<div class="caixa" id="'+dados.key+'"><div class="col-lg-12 text-right"><span class="titdisciplina">'+dados.val().disciplina+'</span>'+
+        '<div class="text-left pergunta">'+numQue+'. '+dados.val().pergunta+'<div id="opcoes">'+opc+'</div></div></div></div>'
+        );
+    conteudo.appendChild(div);
+
+    var contSlide = contador - 1;
+    var td = document.createElement('td');
+    td.className = classe;
+    td.setAttribute('data-target','#carrosselquestio');
+    td.setAttribute('data-slide-to', contSlide);
+    td.innerHTML = ( '<span>'+numQue+'</span>' );
+    numNavega.appendChild(td);
+    
+            //pausando o carrossel
+        $('.carousel').carousel('pause');
+   
+}
+}else{}
+})
+//carregamento
+    .then(function () {
+      if (carrega<100){
+          var perc = parseInt(carrega)+ '%';
+          document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped  progress-bar-animated" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100">'+perc+'</div></div>'
+      }else if (carrega=100){
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">completo!</div></div>'
+        setTimeout(function(){
+            document.getElementById('carregamento').style.display = 'none';
+            document.getElementById('corpo').className = 'animated fadeIn';
+            document.getElementById('corpo').style.display = 'block';
+            //iniciando cronometro
+            getSecs();
+                }, 2000);
+      }
+    }).catch(function(err) {
+        console.log('erro: '+ err);
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+    })
+
+
+
+
+})//foreach
+}) .catch(function(err) {
+        console.log('erro: '+ err);
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+    })  
+
+}
+
+//contador
+var hora = "00"; 
+var min = "30";
+var seg = 00;
+function getSecs(){
+	seg--;
+	if(seg<0){ seg=59; min--;
+        if(min<=9){ min="0"+min;}
+    }
+    if(min=="0-1"){ min=5;hora--;
+        if(hora<=9){ hora="0"+hora;}
+    }
+    if(seg<=9){seg="0"+seg;}
+    if(min<6){ clock1.style.color = 'red'; }
+    if(hora=="0-1"){ hora="00"; min="00"; seg="00";
+        clock1.innerHTML='<i class="far fa-clock"> </i> '+min+" : "+seg;
+        setTimeout(function(){
+            document.getElementById('corpo').style.display = 'none';
+            document.getElementById('mensagemTempo').className = 'animated fadeIn';
+            document.getElementById('mensagemTempo').style.display = 'block';
+                }, 2000);
+    }
+    else{ clock1.innerHTML='<i class="far fa-clock"> </i> '+min+" : "+seg; setTimeout('getSecs()',1000); }
+}
+//fim contador
+
+var questio = new Object ();
+  //finalização
+function finalizar() {
+//confirmação
+var retorno = confirm('Você tem certeza que deseja finalizar?');
+    if (retorno){
+        //desabilitando botao
+        document.getElementById("botFinal").disabled = true;
+        document.getElementById("botFinal").style.cursor = "no-drop";
+
+//nome
+var nome = document.getElementById('nome').innerHTML;
+//data e hora
+var d = new Date();
+var chaveQuestio = (d.getFullYear()+''+("0"+(d.getMonth() + 1)).slice(-2)+''+("0" + d.getDate()).slice(-2)+''+("0" + d.getHours()).slice(-2)+''+("0" + d.getMinutes()).slice(-2)+''+("0" + d.getSeconds()).slice(-2));
+var datahora = (("0" + d.getDate()).slice(-2)+'/'+("0"+(d.getMonth() + 1)).slice(-2)+'/'+d.getFullYear()+' às '+("0" + d.getHours()).slice(-2)+':'+("0" + d.getMinutes()).slice(-2));
+//tempo de prova   
+var tempomin = ("0"+(29 - document.getElementById('clock1').innerHTML.replace('<i class="far fa-clock"> </i>','').split(":")[0])).slice(-2);
+var temposeg = ("0"+(60 - document.getElementById('clock1').innerHTML.replace('<i class="far fa-clock"> </i>','').split(":")[1])).slice(-2);
+var tempo = tempomin+'min '+temposeg+'seg';
+//questoes
+var caixa = document.getElementsByClassName('caixa');
+
+
+//criando objeto questio com chave de questao e  = eResp.toString().replace("","") do usuario
+for (var i=0; i<caixa.length; i++) {
+
+    var caixaid = caixa[i].id;
+    var valor = document.getElementsByName(caixaid);
+
+    //atribuindo 0 a questão se respondida será substituida pela  = eResp.toString().replace("","")
+    questio[caixaid] =  0;  
+    for (var j=0; j<valor.length; j++) {
+        if (valor[j].checked) {
+            questio[caixaid] =  valor[j].value;            
+        }}
+
+}//fim for
+
+console.log(questio);
+    firebase.database().ref('/usuarios/'+usuario+'/historico/'+chaveQuestio).update({
+        datahora: datahora,
+        tempo: tempo,
+        nome: nome,
+        questoes: questio
+    })
+    //redirecionando para página com resultados   
+    .then(function () {     
+        window.location.replace('historico-questio.html?'+chaveQuestio);
+    })
+
+    }//retorno
+    
+}
+
+
+
+</script>
+</body>
+</html>

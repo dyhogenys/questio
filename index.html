@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--titulo-->
+	<title>Questionário</title>
+	<!--icone-->
+    <link rel="icon" type="ico" href="favicon.ico" />
+	<!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-4.1.1/css/bootstrap.min.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+    <script src="css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+
+
+	<!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
+
+</head>
+<body>
+
+    <!--menuzinho temporario-->
+    <br>
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-3"></div>
+            <a class="menu col-lg-12" href="cadastro.html"><i class="far fa-edit"> </i> Cadastro</a>
+            <a class="menu col-lg-12" href="questoes.html"><i class="fas fa-archive"> </i> Questões</a>
+            <a class="menu col-lg-12" href="questionario.html"><i class="fas fa-diagnoses"> </i> Questionário</a>
+            <a class="menu col-lg-12" href="historico.html"><i class="fas fa-history"></i> Histórico</a>
+            <a class="menu col-lg-12" href="historico-questio.html"><i class="fas fa-history"></i> Histórico Questionario</a>
+            <a class="menu col-lg-12" href="historico-questoes.html"><i class="fas fa-history"></i> Histórico Questoes</a>
+        </div>
+    </div><br><br>
+    <!--fim menuzinho temporario-->
+
+
+
+<script>
+ var localMapsPark = document.getElementById('localMapsPark').value;
+var enderecoLatLng = 'https://maps.googleapis.com/maps/api/geocode/json?address='+localMapsPark+'&key=AIzaSyDRSnBwUm4cvuJbTcCUBEL4K7Yd-4_uIo4';
+$.ajax({
+    url: enderecoLatLng,
+    complete: function(res){
+        meuJSON = JSON.parse(res.responseText);
+        firebase.database().ref('/enviados/parks/' + user.uid).update( {
+            lat: meuJSON.results[0].geometry.location.lat,
+            lng: meuJSON.results[0].geometry.location.lng
+        }).then(function () {
+            console.log('enviou latitude e longitude');
+        })
+    }  
+})
+</script>
+</body>
+</html>
