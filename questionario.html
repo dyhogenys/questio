@@ -19,178 +19,12 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!--fontawesome-free-5.0.13-->
     <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
-
-    <style>
-        .pergunta > p { display: inline; }
-        .pergunta > h1 { display: inline; }
-        .pergunta > h2 { display: inline; }
-        .pergunta > h3 { display: inline; }
-        .pergunta > h4 { display: inline; }
-        .pergunta > h5 { display: inline; }
-        .pergunta > h6 { display: inline; }
-        .caderno{
-            padding:20px;
-            margin: 20px;
-            border:1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            transition: box-shadow 1s;
-            text-align: center;
-            cursor: pointer;
-        }
-        .caderno > i{
-            font-size:45px;
-            color:blue;
-        }
-        .caderno:hover{
-            box-shadow: none;
-            transition: box-shadow 1s;
-        }
-        #corpo{display:none;}  
-        .corpo-questao{
-            padding:0 35px;
-        }
-        #carregamento{
-            margin-top:45%;
-            display: none;
-        }
-        #mensagemTempo{
-            display: none;
-            color:red;
-            text-align: center;
-            margin-top:100px;
-        }
-        .progress{
-            height: 30px;
-            font-size:14px;
-            font-weight: bolder;
-            margin: 0;
-        }
-        .caixa-contador{
-            font-size:20px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 50px;
-            padding: 10px;
-        }
-        .contador{
-            font-size:16px;
-        }
-        #opcoes{
-            margin-top:8px;
-        }     
-        .titdisciplina{
-            background-color: rgba(0, 0, 255, 0.5);
-            padding:3px 8px;
-            color:#fff;
-        }
-                /*carrossel*/
-                .carousel-item {
-            min-height: 400px !important;
-            width:100% !important;
-        }
-        .navega{
-            margin: 20px 0 !important;
-            background-color: transparent !important;
-        }
-        .navega-lista{
-            overflow-x: scroll !important;
-            margin: 0;
-            -webkit-font-smoothing: antialiased;
-            -webkit-user-select: none;
-            -moz-user-select: moz-none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        .navega-lista::-webkit-scrollbar { 
-            display: none !important;
-        }
-        .navega-lista{
-            -ms-overflow-style: none;
-            overflow: -moz-scrollbars-none;
-        }
-        .carousel-indicators{
-            margin: 0px 0 !important;
-            position:relative !important;
-            bottom: 0 !important;
-        }
-        .carousel-indicators td{
-            cursor: pointer !important;
-            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 15px 0 rgba(0, 0, 0, 0.19);
-            border-radius: 100%;
-            background-color: #fff;
-            text-align: center;
-            font-size: 16px;
-            padding: 3px 6px;
-            margin: 8px 2px;
-            transition: box-shadow 1s;
-            border: 1px solid #ccc;
-        }
-        .carousel-indicators td.active{
-            box-shadow:none;
-            transition: box-shadow 1s;
-            background-color:#ccc;
-            transition: background-color 1s;
-        }
-        .botoes-esquerda{
-            position: relative !important;
-            left: -30px !important;
-            top: -33px !important;
-            padding:38px 15px !important;
-            color:#ccc !important;
-            cursor:pointer !important;
-        }
-        .botoes-direita{
-            position: relative !important;
-            left: 93% !important;
-            top: -33px !important;
-            padding:38px 15px !important;
-            color:#ccc !important;
-            cursor:pointer !important;
-        }
-        .navega-lista > table{
-            border-style:none !important;
-        }
-        .carousel-control-prev{
-            background-color:rgba(0, 128, 0, 0.5);
-            color:#fff;
-            height: 25px;
-            width: 30px;
-            margin-top:200px;
-        }
-        .carousel-control-next{
-            background-color:rgba(0, 128, 0, 0.5);
-            color:#fff;
-            height: 25px;
-            width: 30px;
-            margin-top:200px;
-        }
-        /*fim carrossel*/
-        @media screen and (max-width: 992px) {
-            .caixa{
-                padding:5px;
-            }
-            /*.botoes-direita, .botoes-esquerda{display: none;}*/
-        }
-    </style>
 </head>
 <body>
 
- <!--menuzinho temporario-->
- <br>
- <div class="container">
-     <div class="row text-center">
-         <div class="col-lg-3"></div>
-           <a class="menu col-lg-2" href="cadastro.html"><i class="far fa-edit"> </i> Cadastro</a>
-           <a class="menu col-lg-2" href="questoes.html"><i class="fas fa-archive"> </i> Questões</a>
-           <a class="menu col-lg-2" href="questionario.html"><i class="fas fa-diagnoses"> </i> Questionário</a>
-     </div>
- </div><br><br>
- <!--fim menuzinho temporario-->
-
 
 <!--provas-->
-<div class="container" id="cadernos">
+<div class="container conteudo" id="cadernos">
     <div class="row">
         <div class="col-lg-3"></div>
         <div class="col-lg-3 caderno" onclick="comecar('Caderno I - ESS','SAC','2','RAC',2)"> 
@@ -231,26 +65,32 @@
 </div>
 <!--fim provas-->
 
-    <!--carregando-->
-    <div class="container">
-        <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
-            <div id="carregamento">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped  progress-bar-animated" role="progressbar" style="width:10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
-                        carregando...
-                    </div>
-                </div>
+<!--carregando-->
+<div class="container">
+    <div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <div id="carregamento" class="animated fadeInDown">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width:10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
-        </div>
+            <p style="text-align:center;">carregando...</p>
         </div>
     </div>
-    <!--fim carregando-->
+    </div>
+</div>
+<!--fim carregando-->
 
     <div id="mensagemTempo"><h3>Tempo esgotado!</h3></div>
 
     <div id="corpo">
+
+    <!--barra-->
+    <div class="barra-top">
+        <h3 id="nome" style="margin-top:0;"></h3>
+    </div>
+    <!--fim-barra-->
+
         <div class="container">
 
         <!--contador-->
@@ -268,7 +108,6 @@
 
         <!--listando questoes-->
         <div class="container">
-            <h3 id="nome"></h3><!--nome do questionario-->
             <div id="carrosselquestio" class="carousel slide" data-ride="carousel">
                 <div class="corpo-questao">
                <!--miniaturas-->
@@ -436,12 +275,12 @@ firebase.database().ref('/questoes/').once("value").then(function(child) {
 
     })  .catch(function(err) {
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
     })
 })//foreach
 })  .catch(function(err) {
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
     })
 
 //imprimindo questoes
@@ -452,7 +291,7 @@ function listaQuestoes(opc, classe, contador) {
     var div = document.createElement('div');
     div.className = 'carousel-item '+classe;
     div.innerHTML = (
-        '<div class="caixa" id="'+dados.key+'"><div class="col-lg-12 text-right"><span class="titdisciplina">'+dados.val().disciplina+'</span>'+
+        '<div class="caixa-questio" id="'+dados.key+'"><div class="col-lg-12"><span class="titdisciplina">'+dados.val().disciplina+'</span>'+
         '<div class="text-left pergunta">'+numQue+'. '+dados.val().pergunta+'<div id="opcoes">'+opc+'</div></div></div></div>'
         );
     conteudo.appendChild(div);
@@ -475,9 +314,9 @@ function listaQuestoes(opc, classe, contador) {
     .then(function () {
       if (carrega<100){
           var perc = parseInt(carrega)+ '%';
-          document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped  progress-bar-animated" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100">'+perc+'</div></div>'
+          document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">'+perc+'</p>'
       }else if (carrega=100){
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">completo!</div></div>'
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo!</p>'
         setTimeout(function(){
             document.getElementById('carregamento').style.display = 'none';
             document.getElementById('corpo').className = 'animated fadeIn';
@@ -488,7 +327,7 @@ function listaQuestoes(opc, classe, contador) {
       }
     }).catch(function(err) {
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
     })
 
 
@@ -497,7 +336,7 @@ function listaQuestoes(opc, classe, contador) {
 })//foreach
 }) .catch(function(err) {
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro ao carregar!</div></div>' 
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
     })  
 
 }
@@ -549,7 +388,7 @@ var tempomin = ("0"+(29 - document.getElementById('clock1').innerHTML.replace('<
 var temposeg = ("0"+(60 - document.getElementById('clock1').innerHTML.replace('<i class="far fa-clock"> </i>','').split(":")[1])).slice(-2);
 var tempo = tempomin+'min '+temposeg+'seg';
 //questoes
-var caixa = document.getElementsByClassName('caixa');
+var caixa = document.getElementsByClassName('caixa-questio');
 
 
 //criando objeto questio com chave de questao e  = eResp.toString().replace("","") do usuario
@@ -576,7 +415,7 @@ console.log(questio);
     })
     //redirecionando para página com resultados   
     .then(function () {     
-        window.location.replace('historico-questio.html?'+chaveQuestio);
+        window.location.replace('historico/resultado.html?'+chaveQuestio);
     })
 
     }//retorno

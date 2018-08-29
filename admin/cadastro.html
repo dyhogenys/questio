@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--titulo-->
+	<title>Cadastro de Questões</title>
+	<!--icone-->
+    <link rel="icon" type="ico" href="../favicon.ico" />
+	<!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-4.1.1/css/bootstrap.min.css">
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+	<!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="../css/animate.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="../css/font-awesome/css/fontawesome-all.min.css">
+
+</head>
+<body class="animated fadeIn">
+
+    <!--barra-->
+    <div class="barra-top">
+        <i class="far fa-arrow-alt-circle-left bot-voltar" onclick="window.history.go(-1)"></i>
+        <h3>Cadastro de nova Questão</h3>
+    </div>
+    <!--fim-barra-->
+
+<!--formulario-->
+<div class="container">
+<div class="row">
+<div class="col-lg-2"></div>
+<div class="col-lg-8">
+    <h5>Cadastro de nova Questão</h5>
+    <hr>
+    <div class="form-group" id="divpergunta">
+        <label for="pergunta">Pergunta*</label>
+        <textarea type="textarea" class="form-control" id="pergunta"></textarea>
+    </div>
+
+    <!--disciplina-->
+            <label for="disciplina">Disciplina</label>
+            <select class="form-control" id="disciplina">
+                <option disabled selected value>--selecione uma opção--</option>
+                <option>SOB</option>
+                <option>EME</option>
+                <option>FOG</option>
+                <option>RPA</option>
+                <option>SAC</option>
+                <option>SEG</option>
+                <option>RAC</option>
+                <option>CLT</option>
+                <option>PSS</option>
+                <option>CGA</option>
+                <option>NAV</option>
+                <option>MET</option>
+            </select><br>
+    <!--fim disciplina-->
+
+    <!--tipo-->
+    <div class="form-group" style="background-color: #E9E9E9;padding:15px;">
+    <input id="uma" class="radio-inline" type="radio" name="escolhaTipo" value="radio" checked>
+    <label for="uma">Escolha única</label>
+    <input id="mult" class="radio-inline" type="radio" name="escolhaTipo" value="checkbox">
+    <label for="mult">Multiplas Escolhas</label>
+    </div>
+    <!--fim tipo-->
+
+    <!--opções-->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input type="radio" name="novaOpcao"> 
+            </div>
+        </div>
+        <input type="text" name="valorOpcao" class="form-control">
+        <div class="input-group-append">
+            <span class="input-group-text delete" onclick="excluir(this)">&times;</span>
+        </div>
+    </div>
+<!--2-->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input type="radio" name="novaOpcao"> 
+            </div>
+        </div>
+        <input type="text" name="valorOpcao" class="form-control">
+        <div class="input-group-append">
+            <span class="input-group-text delete" onclick="excluir(this)">&times;</span>
+        </div>
+    </div>
+<!--3-->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input type="radio" name="novaOpcao"> 
+            </div>
+        </div>
+        <input type="text" name="valorOpcao" class="form-control">
+        <div class="input-group-append">
+            <span class="input-group-text delete" onclick="excluir(this)">&times;</span>
+        </div>
+    </div>
+<!--4-->
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <div class="input-group-text">
+                <input type="radio" name="novaOpcao"> 
+            </div>
+        </div>
+        <input type="text" name="valorOpcao" class="form-control">
+        <div class="input-group-append">
+            <span class="input-group-text delete" onclick="excluir(this)">&times;</span>
+        </div>
+    </div>
+
+    <!--div botao nova opcao-->
+    <div id="divnovaOpcao"></div>
+    <!--nova opcao-->
+    <span class="btn btn-danger my-2 my-sm-0" id="botaonovaOpcao">Nova Opção</span>
+    <!--fim formulario-->
+    <div id="mensagem"></div><!--mensagem status-->
+
+    <hr>
+    <button type="button" class="btn btn-secondary" onclick="document.getElementById('mostrarCadastro').style.display = 'none';">Cancelar</button>
+    <button type="button" class="btn btn-primary" id="enviarPergunta">Salvar</button>
+
+</div>
+</div>
+</div>
+
+    <!--modal editar questoes-->
+    <!--fim modal editar questoes-->
+
+
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="../js/app.js"></script>
+<!--editor de texto-->
+<script src="../ckeditor/ckeditor.js"></script>
+<script>
+    //iniciando ckeditor
+    var dpergunta;
+    ClassicEditor
+        .create( document.querySelector('#pergunta'))
+        .then( editor => {
+            dpergunta = editor;
+        })
+        .catch( err => {
+            console.error( 'Erro no ckeditor' + err);
+        });
+
+//multiplas escolhas
+var mult = document.getElementById('mult');
+mult.addEventListener("click", function () {
+var novaOpcao = document.getElementsByName('novaOpcao');
+var i, proximo, cont = 0;
+for (i=0; i<novaOpcao.length; i++) {
+    novaOpcao[i].type = 'checkbox';
+}})
+//uma escolha
+var uma = document.getElementById('uma');
+uma.addEventListener("click", function () {
+var novaOpcao = document.getElementsByName('novaOpcao');
+var i, proximo, cont = 0;
+for (i=0; i<novaOpcao.length; i++) {
+    novaOpcao[i].type = 'radio';
+}})
+
+//botao nova opção
+var botaonovaOpcao = document.getElementById('botaonovaOpcao');
+botaonovaOpcao.addEventListener("click", function () {
+var divnovaOpcao = document.getElementById('divnovaOpcao');
+var escolhaTipo = getValor('escolhaTipo');
+var div = document.createElement('div');
+div.innerHTML = (
+    '<div class="input-group mb-3 animated fadeInDown"><div class="input-group-prepend"><div class="input-group-text"><input type="'+escolhaTipo+'" name="novaOpcao"></div></div>'+
+    '<input type="text" name="valorOpcao" class="form-control">'+
+    '<div class="input-group-append"><span class="input-group-text delete" onclick="excluir(this)">&times;</span></div></div>'
+    );
+divnovaOpcao.appendChild(div);
+})
+
+/*##################funções##################*/
+//funçao pegando valores de radios e checkbox checados em string
+function getValor(name) {
+var valor = new Array ();
+var checado = new Array ();
+var valor = document.getElementsByName(name);
+var i, proximo, cont = 0;
+for (i=0; i<valor.length; i++) {
+    if (valor[i].checked) {
+        proximo = cont;
+        checado[proximo] = null;
+        checado[cont] = valor[i].value;
+        cont++;
+    }}return checado.toString();}
+
+//funçao pegando valores de radios e checkbox checados como chave e valores de imputs como valor de string
+function getValores(name, seletor) {
+var valor = new Object ();
+var result = new Object ();
+var valor = document.getElementsByName(name);
+var radio = document.getElementsByName(seletor);
+for (i=0; i<valor.length; i++) {
+    if(radio[i].checked){
+        result[i+'res'] = valor[i].value;
+    }
+    else{result[i] = valor[i].value;}
+}return result;}
+
+//função excluir opcoes
+function excluir(e){
+    var p = e.parentNode;
+    var g = p.parentNode;
+    g.parentNode.removeChild(g);
+}
+
+//função valida opcoes
+function validaOpc(param) {
+    var e;
+    var valOpc = document.getElementsByName(param);
+    for (i=0; i<valOpc.length; i++) {
+        if(valOpc[i].value == ''){
+            valOpc[i].style.border = "thin solid red";
+            e = 'val'; 
+        }else{valOpc[i].style.borderColor = "";}
+    }
+    return e;
+}
+
+/*############fim funçoes###############*/
+
+/*############envio###############*/
+//envio
+var mensagem = document.getElementById('mensagem');
+var enviarPergunta = document.getElementById('enviarPergunta');
+enviarPergunta.addEventListener("click", function () {
+    //carregando
+    mensagem.innerHTML = ('<br><hr><div class="animated fadeIn">Carregando... <img src="../img/load.gif"/></div>');
+
+    //limpado validacao
+    document.getElementById('divpergunta').style.borderColor = "#fff";
+    document.getElementById('disciplina').style.borderColor = "";
+
+    //pegando valores
+    var opc = getValores('valorOpcao', 'novaOpcao');//object opcoes
+    var dadosPergunta = dpergunta.getData();//pergunta
+    var tipo = getValor('escolhaTipo');//tipo
+    var disciplina = document.getElementById('disciplina').value;//disciplina
+
+    //validação
+    if (dadosPergunta == '<p>&nbsp;</p>') {
+        document.getElementById('divpergunta').style.border = "thin solid red";
+        mensagem.innerHTML = ('<br><hr><div class="alert alert-danger"><span class="animated flash">Digite a pergunta!</span></div>');
+    }
+    else if (disciplina == '') {
+        document.getElementById('disciplina').style.border = "thin solid red";
+        mensagem.innerHTML = ('<br><hr><div class="alert alert-danger"><span class="animated flash">Escolha pelo menos um disciplina!</span></div>');
+    }
+    else if (validaOpc('valorOpcao') == 'val') {
+        mensagem.innerHTML = ('<br><hr><div class="alert alert-danger"><span class="animated flash">Não deixe opções em branco!</span></div>');
+    }
+    else if (getValor('novaOpcao') == '') {
+        mensagem.innerHTML = ('<br><hr><div class="alert alert-danger"><span class="animated flash">Selecione a resposta!</span></div>');
+    }
+    else{
+
+    //enviando para o firebase
+    firebase.database().ref('/questoes/').push().update({
+        pergunta: dadosPergunta,
+        tipo: tipo,
+        disciplina: disciplina,
+        opcoes: opc
+    }).then(function(){
+        mensagem.innerHTML = ('<br><hr><div class="alert alert-success"><span class="animated fadeIn">Enviado com sucesso!</span></div>');
+        setTimeout("location.reload()", 2000);
+    }).catch(function (error) {
+        mensagem.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao enviar! Tente novamente...</span></div>');
+        console.log('Erro de envio: ' + error.message);
+    });
+
+    }//fim else validacao
+})//fim envio
+
+
+/*############ fim envio###############*/
+
+
+
+
+</script>
+</body>
+</html>

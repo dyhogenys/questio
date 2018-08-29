@@ -23,38 +23,23 @@
 </head>
 <body>
 
-    <!--menuzinho temporario-->
-    <br>
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-lg-3"></div>
-            <a class="menu col-lg-12" href="cadastro.html"><i class="far fa-edit"> </i> Cadastro</a>
-            <a class="menu col-lg-12" href="questoes.html"><i class="fas fa-archive"> </i> Questões</a>
-            <a class="menu col-lg-12" href="questionario.html"><i class="fas fa-diagnoses"> </i> Questionário</a>
-            <a class="menu col-lg-12" href="historico.html"><i class="fas fa-history"></i> Histórico</a>
-            <a class="menu col-lg-12" href="historico-questio.html"><i class="fas fa-history"></i> Histórico Questionario</a>
-            <a class="menu col-lg-12" href="historico-questoes.html"><i class="fas fa-history"></i> Histórico Questoes</a>
+<!--menu-->
+<div class="container conteudo" id="cadernos">
+        <div class="row">
+            <div class="col-lg-2"></div>        
+            <a class="col-lg-4 caderno" href="questionario.html"> 
+                <img src="img/questio.png" width="100%" height="auto">
+                <h5>Começar questionario!</h5>
+            </a>
+            <a class="col-lg-4 caderno" href="historico/index.html">
+                <img src="img/dados-lupa.png" width="100%" height="auto">
+                <h5>Meu Aproveitamento</h5>   
+            </a>
         </div>
-    </div><br><br>
-    <!--fim menuzinho temporario-->
+    </div>
+<!--menu-->
 
 
 
-<script>
- var localMapsPark = document.getElementById('localMapsPark').value;
-var enderecoLatLng = 'https://maps.googleapis.com/maps/api/geocode/json?address='+localMapsPark+'&key=AIzaSyDRSnBwUm4cvuJbTcCUBEL4K7Yd-4_uIo4';
-$.ajax({
-    url: enderecoLatLng,
-    complete: function(res){
-        meuJSON = JSON.parse(res.responseText);
-        firebase.database().ref('/enviados/parks/' + user.uid).update( {
-            lat: meuJSON.results[0].geometry.location.lat,
-            lng: meuJSON.results[0].geometry.location.lng
-        }).then(function () {
-            console.log('enviou latitude e longitude');
-        })
-    }  
-})
-</script>
 </body>
 </html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--titulo-->
+	<title>Histórico</title>
+	<!--icone-->
+    <link rel="icon" type="ico" href="../favicon.ico" />
+	<!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap-4.1.1/css/bootstrap.min.css">
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+	<!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="../css/animate.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="../css/font-awesome/css/fontawesome-all.min.css">
+</head>
+<body>
+
+<div id="carregamento" style="position:fixed; width:80%; top:10%; left:10%; z-index:9999999999;">
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped  bg-warning progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+            arrumando firebase... acompanhe pelo console...
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <div id="log" style="margin-top:30px;"></div>
+        </div>
+    </div>
+</div>
+
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="../js/app.js"></script>
+</body>
+
+<script>
+
+const total = 1626;//total de questoes de 0 á (...)
+
+for (j=0; j<(total+1); j++) { 
+ firebase.database().ref(j).once("value", function(c) {
+
+    
+    var opcoes;
+    var opcoes = new Object ();
+
+    //opcoes
+    if(c.val().correta == 1){ opcoes['1res'] = c.val().q1;} else{ opcoes[1] = c.val().q1;}
+    if(c.val().correta == 2){ opcoes['2res'] = c.val().q2;} else{ opcoes[2] = c.val().q2;}
+    if(c.val().correta == 3){ opcoes['3res'] = c.val().q3;} else{ opcoes[3] = c.val().q3;}
+    if(c.val().correta == 4){ opcoes['4res'] = c.val().q4;} else{ opcoes[4] = c.val().q4;}
+    
+    //enviar
+    firebase.database().ref('/questoes/').push().update({
+        pergunta: '<p>'+c.val().ENUNCIADO+'</p>',
+        tipo: 'radio',
+        disciplina: c.val().disciplina,
+        opcoes: opcoes
+    })//excluindo
+        .then(function() {
+            //log
+            var opc = opcoes.toString();
+            var log = document.getElementById('log');
+            var small = document.createElement('small');
+                small.innerHTML = ('Pergunta: '+c.val().ENUNCIADO+'</br>tipo: radio</br> disciplina: '+c.val().disciplina+'</br>opcoes: '+opc);
+            log.appendChild(small);
+            //excluindo
+            firebase.database().ref(c.key).remove();
+            console.log(c.key);
+        })
+        .catch(function(err) {
+            console.log('erro ao enviar: '+err);
+            document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro!</div></div>'
+        })
+
+
+}) .catch(function(err) {
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro!</div></div>'
+    })
+}
+
+
+</script>
+
+</html>
