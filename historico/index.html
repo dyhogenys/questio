@@ -26,16 +26,16 @@
 <!--menu-->
     <div class="container conteudo">
         <div class="row">
-            <div class="col-lg-2"></div>
-            <a class="col-lg-3 caderno" style="margin-left:-20px;" href="graficos.html"> 
+            <div class="col-md-2"></div>
+            <a class="col-md-3 caderno" style="margin-left:-20px;" href="graficos.html"> 
                 <img src="../img/questio.png" width="100%" height="auto">
                 <h5>Visão Geral</h5>
             </a>
-            <a class="col-lg-3 caderno" href="questionarios.html">
+            <a class="col-md-3 caderno" href="questionarios.html">
                 <img src="../img/dados-lupa.png" width="100%" height="auto">
                 <h5>Todas os Questionarios</h5>   
             </a>
-            <a class="col-lg-3 caderno" href="questoes.html">
+            <a class="col-md-3 caderno" href="questoes.html">
                 <img src="../img/dados-lupa.png" width="100%" height="auto">
                 <h5>Todas as Questões</h5>   
             </a>       
@@ -43,6 +43,20 @@
     </div>
 <!--menu-->
 
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="../js/app.js"></script>
+
+<script>
+    
+//mandadndo deslogados para a pagina de login
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario){  }//fim if user
+    else{window.location.replace('../login.html');}//fim else user
+});//fim user
+
+</script>
 
 </body>
 </html>

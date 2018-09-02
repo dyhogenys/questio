@@ -61,17 +61,20 @@
 <script src="../js/app.js"></script>
 <script>
 
-        const usuario = 'dyhogenys';
-
     var car = 0;
     var carrega = 0; 
     var totalcarga = 0;
     var carga = 0;
     var cont = 1;
-    firebase.database().ref('/usuarios/'+usuario+'/historico/').once("value", function(userQuestio) {//questionarios
+
+//usuario
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario){ 
+    firebase.database().ref('/usuarios/'+usuario.uid+'/historico/').once("value", function(userQuestio) {//questionarios
 
            //se questionário não existir
-           if (userQuestio.exists()){} else{ document.getElementById('corpo').innerHTML = '<p style="color:red; margin-left:30px;">Nenhum questionário registrado</p>' }
+           if (userQuestio.exists()){} else{ 
+               document.getElementById('corpo').innerHTML = '<p style="color:red;margin-top:25%;text-align:center;">Nenhum questionário registrado!</p>'}
 
         if(cont===1){
             //carregamento
@@ -117,6 +120,9 @@
     console.log('erro: '+ err);
     document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
     })
+}//fim if user
+else{window.location.replace('../login.html');}//fim else user
+});//fim user
 
 
 //redirecionando para resultado do questionario

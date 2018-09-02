@@ -213,8 +213,8 @@ ol{
 }
 .carousel-indicators td{
     cursor: pointer !important;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 15px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 100%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+   /* border-radius: 100%;*/
     background-color: #fff;
     text-align: center;
     font-size: 16px;
@@ -226,8 +226,10 @@ ol{
 .carousel-indicators td.active{
     box-shadow:none;
     transition: box-shadow 1s;
-    background-color:#ccc;
-    transition: background-color 1s;
+    /*background-color:#ccc;*/
+    border-color: rgba(0, 128, 0, 0.5);
+    transition: border 3s;
+    /*transition: background-color 1s;*/
 }
 .botoes-esquerda{
     position: relative !important;
@@ -266,16 +268,20 @@ ol{
     margin-top: 30px;
 }
 /*fim questionario*/
-
-
+.caderno1{
+    margin-left:-20px;
+}
 
 /*bootstrap*/
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 768px) {
     .conteudo{
         margin-top:0;
     }
     .caixa{
         padding:5px;
+    }
+    .caderno{
+        margin:10px !important;
     }
 }
 

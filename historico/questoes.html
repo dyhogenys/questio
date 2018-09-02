@@ -139,9 +139,6 @@
 <script src="../js/app.js"></script>
 
 <script>
-    
-    const usuario = 'dyhogenys';
-
 
 var car = 0;
 var carrega = 0; 
@@ -150,16 +147,21 @@ var carga = 0;
 var disciplinasInfo = [];
 var cont = 1;
 
+//usuario
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario){ 
+
 //listanso questoes respondidas do usuario
-firebase.database().ref('/usuarios/'+usuario+'/historico/').once("value", function (userChild) {
-    userChild.forEach(function (eZ) {//chave questionario
-    firebase.database().ref('/usuarios/'+usuario+'/historico/'+eZ.key+'/questoes/').once("value", function(child) {
+firebase.database().ref('/usuarios/'+usuario.uid+'/historico/').once("value", function (userChild) {
+  //se questionário não existir
+  if (userChild.exists()){} else{ document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">Nenhuma questão ainda!</p>'}
+
+  userChild.forEach(function (eZ) {//chave questionario
+    firebase.database().ref('/usuarios/'+usuario.uid+'/historico/'+eZ.key+'/questoes/').once("value", function(child) {
        child.forEach(function (d) {//chave questão
 
 //listando questoes
  firebase.database().ref('/questoes/'+d.key).once("value").then(function(dados) {
-
-
 
     //certas erradas
     cert = 0; erra = 0;
@@ -227,6 +229,14 @@ if(itemsProcessed === 0){
 
     //marcando respostas
     var resp = dadosOpc.key.replace("res", "");
+    if(d.val() === 0){
+        if(dadosOpc.key.indexOf("res") != -1){
+        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
+        }else{
+            listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
+        }
+    }
+    else{
     if(resp === d.val()){
         listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
     }else{
@@ -235,6 +245,7 @@ if(itemsProcessed === 0){
     }
     if(dadosOpc.key.indexOf("res") != -1){
         listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
+    }
     }
             itemsProcessed++;
 //depois de terminar de listar as questao retornando lista completa
@@ -307,11 +318,10 @@ console.log('erro: '+ err);
 document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
 })
 
-
- 
-
 })})})})
-
+}//fim if user
+else{window.location.replace('../login.html');}//fim else user
+});//fim user
 
 //procurar input search
 function procurar() {

@@ -26,12 +26,12 @@
 <!--menu-->
     <div class="container conteudo" id="cadernos">
         <div class="row">
-            <div class="col-lg-2"></div>        
-            <a class="col-lg-4 caderno" href="cadastro.html"> 
+            <div class="col-md-2"></div>        
+            <a class="col-md-4 caderno" href="cadastro.html"> 
                 <img src="../img/prancheta.png" width="100%" height="auto">
                 <h5>Cadastro de Questões</h5>
             </a>
-            <a class="col-lg-4 caderno" href="questoes.html">
+            <a class="col-md-4 caderno" href="questoes.html">
                 <img src="../img/dados-lupa.png" width="100%" height="auto">
                 <h5>Arquivo questões</h5>   
             </a>
@@ -39,23 +39,20 @@
     </div>
 <!--menu-->
 
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="../js/app.js"></script>
 <script>
-    /*
- var localMapsPark = document.getElementById('localMapsPark').value;
-var enderecoLatLng = 'https://maps.googleapis.com/maps/api/geocode/json?address='+localMapsPark+'&key=AIzaSyDRSnBwUm4cvuJbTcCUBEL4K7Yd-4_uIo4';
-$.ajax({
-    url: enderecoLatLng,
-    complete: function(res){
-        meuJSON = JSON.parse(res.responseText);
-        firebase.database().ref('/enviados/parks/' + user.uid).update( {
-            lat: meuJSON.results[0].geometry.location.lat,
-            lng: meuJSON.results[0].geometry.location.lng
-        }).then(function () {
-            console.log('enviou latitude e longitude');
-        })
-    }  
-})
-*/
+    
+//mandando deslogados e não administradores para a pagina principal
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario && usuario.uid === 'QfQCcZeym5gJzAVTZyKGff7PzTJ3'){ 
+        console.log('sdfadsa');
+     }//fim if user
+    else{window.location.replace('../');}//fim else user
+});//fim user
+
 </script>
 </body>
 </html>

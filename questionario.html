@@ -19,6 +19,11 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!--fontawesome-free-5.0.13-->
     <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
+
+    <style>
+        #carregamento{ display:none; }
+        .conteudo{ margin-top:100px; }    
+    </style>
 </head>
 <body>
 
@@ -26,16 +31,16 @@
 <!--provas-->
 <div class="container conteudo" id="cadernos">
     <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-3 caderno" onclick="comecar('Caderno I - ESS','SAC','2','RAC',2)"> 
+        <div class="col-md-3"></div>
+        <div class="col-md-3 caderno" onclick="comecar('Caderno I - ESS','SOB','10','EME','7','FOG','3')"> 
             <img src="img/test.png" width="100%" height="auto">
             <h5>Caderno I - ESS</h5>
             <small> SOB	10, </small>
             <small> EME	7, </small>
             <small> FOG	3 </small>
-
         </div>
-        <div class="col-lg-3 caderno" onclick="comecar('Caderno II - RPA','RPA','10','SAC','4','SEG','3','RAC','2','CLT','1')">
+
+        <div class="col-md-3 caderno" onclick="comecar('Caderno II - RPA','RPA','10','SAC','4','SEG','3','RAC','2','CLT','1')">
             <img src="img/test.png" width="100%" height="auto">
             <h5>Caderno II - RPA</h5>
             <small> RPA	10, </small>
@@ -43,23 +48,22 @@
             <small> SEG	3, </small>
             <small> RAC	2, </small>
             <small> CLT	1 </small>
-
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-3 caderno" onclick="comecar('Caderno III - PSS','PSS','20')"> 
+        <div class="col-md-3"></div>
+        <div class="col-md-3 caderno" onclick="comecar('Caderno III - PSS','PSS','20')"> 
             <img src="img/test.png" width="100%" height="auto">
             <h5>Caderno III - PSS</h5>
             <small>PSS 20</small>
         </div>
-        <div class="col-lg-3 caderno" onclick="comecar('Caderno IV - CGA','CGA','10','NAV','5','MET','5')">
+
+        <div class="col-md-3 caderno" onclick="comecar('Caderno IV - CGA','CGA','10','NAV','5','MET','5')">
             <img src="img/test.png" width="100%" height="auto">
             <h5>Caderno IV - CGA</h5>
             <small> CGA	10, </small>
             <small> NAV	5, </small>
             <small> MET	5 </small>
-
         </div>
     </div>
 </div>
@@ -70,7 +74,7 @@
     <div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
-        <div id="carregamento" class="animated fadeInDown">
+        <div id="carregamento">
             <div class="progress">
                 <div class="progress-bar" role="progressbar" style="width:10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
@@ -81,7 +85,7 @@
 </div>
 <!--fim carregando-->
 
-    <div id="mensagemTempo"><h3>Tempo esgotado!</h3></div>
+    <div id="mensagemTempo"><h3><i class="fas fa-stopwatch"></i> Tempo esgotado!</h3></div>
 
     <div id="corpo">
 
@@ -91,15 +95,14 @@
     </div>
     <!--fim-barra-->
 
-        <div class="container">
-
+        <div class="container-fluid">
         <!--contador-->
         <div class="row">
             <div class="col-lg-10">
                 <h5 id="tituloQuestio"></h5>
             </div>
             <div class="col-lg-2 text-center caixa-contador">
-                <span id="clock1" class="contador"></span>
+                <span id="clock1" class="contador"><i class="far fa-clock"></i> 30 : 00</span>
             </div>
         </div>
         </div>
@@ -107,7 +110,7 @@
 
 
         <!--listando questoes-->
-        <div class="container">
+        <div class="container-fluid">
             <div id="carrosselquestio" class="carousel slide" data-ride="carousel">
                 <div class="corpo-questao">
                <!--miniaturas-->
@@ -165,16 +168,18 @@
     //pausar carrossel em mobile
 //setInterval(" $('.carousel').carousel('pause');",2000)
 
-
-
-const usuario = 'dyhogenys';
+//mandadndo deslogados para a pagina de login
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario){  }//fim if user
+    else{window.location.replace('login.html');}//fim else user
+});//fim user
 
 
 cont1=0;cont2=0;cont3=0;cont4=0;cont5=0;contadorGeral=0;
 function comecar(nome,disc1,totalCont1,disc2,totalCont2,disc3,totalCont3,disc4,totalCont4,disc5,totalCont5) {
 
     document.getElementById('cadernos').style.display = 'none';
-    document.getElementById('carregamento').className = 'animated fadeIn';
+    document.getElementById('carregamento').className = 'animated fadeInDown';
     document.getElementById('carregamento').style.display = 'block';
 
     //nome
@@ -191,9 +196,9 @@ firebase.database().ref('/questoes/').once("value").then(function(child) {
     firebase.database().ref('/questoes/'+d.key).once("value").then(function(dados) {
         //carregamento
         if(cont===1){
-            totalcarga = (child.numChildren());
+            totalcarga = child.numChildren();
             carga = (100/totalcarga);
-            carrega = carga*2;
+            carrega = carga;
             cont++;
         }else{ carrega += carga; cont++; }
 
@@ -304,10 +309,7 @@ function listaQuestoes(opc, classe, contador) {
     td.innerHTML = ( '<span>'+numQue+'</span>' );
     numNavega.appendChild(td);
     
-            //pausando o carrossel
-        $('.carousel').carousel('pause');
-   
-}
+}//fim função listaQuestão
 }else{}
 })
 //carregamento
@@ -315,12 +317,14 @@ function listaQuestoes(opc, classe, contador) {
       if (carrega<100){
           var perc = parseInt(carrega)+ '%';
           document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">'+perc+'</p>'
-      }else if (carrega=100){
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo!</p>'
+      }else{
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo</p>'
         setTimeout(function(){
             document.getElementById('carregamento').style.display = 'none';
             document.getElementById('corpo').className = 'animated fadeIn';
             document.getElementById('corpo').style.display = 'block';
+             //pausando o carrossel
+            $('.carousel').carousel('pause');
             //iniciando cronometro
             getSecs();
                 }, 2000);
@@ -328,7 +332,7 @@ function listaQuestoes(opc, classe, contador) {
     }).catch(function(err) {
         console.log('erro: '+ err);
         document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
-    })
+    }) 
 
 
 
@@ -342,28 +346,26 @@ function listaQuestoes(opc, classe, contador) {
 }
 
 //contador
-var hora = "00"; 
-var min = "30";
+var min = 30;
 var seg = 00;
 function getSecs(){
-	seg--;
+	setInterval(function(){
+    seg--;
 	if(seg<0){ seg=59; min--;
         if(min<=9){ min="0"+min;}
     }
-    if(min=="0-1"){ min=5;hora--;
-        if(hora<=9){ hora="0"+hora;}
-    }
     if(seg<=9){seg="0"+seg;}
     if(min<6){ clock1.style.color = 'red'; }
-    if(hora=="0-1"){ hora="00"; min="00"; seg="00";
-        clock1.innerHTML='<i class="far fa-clock"> </i> '+min+" : "+seg;
+    if(min=="0-1"){ min="00"; seg="00";
+       
         setTimeout(function(){
             document.getElementById('corpo').style.display = 'none';
             document.getElementById('mensagemTempo').className = 'animated fadeIn';
             document.getElementById('mensagemTempo').style.display = 'block';
                 }, 2000);
     }
-    else{ clock1.innerHTML='<i class="far fa-clock"> </i> '+min+" : "+seg; setTimeout('getSecs()',1000); }
+    else{ clock1.innerHTML='<i class="far fa-clock"> </i> '+min+" : "+seg; }
+    },1000);
 }
 //fim contador
 
@@ -407,7 +409,9 @@ for (var i=0; i<caixa.length; i++) {
 }//fim for
 
 console.log(questio);
-    firebase.database().ref('/usuarios/'+usuario+'/historico/'+chaveQuestio).update({
+
+firebase.auth().onAuthStateChanged(usuario => {
+    firebase.database().ref('/usuarios/'+usuario.uid+'/historico/'+chaveQuestio).update({
         datahora: datahora,
         tempo: tempo,
         nome: nome,
@@ -417,11 +421,10 @@ console.log(questio);
     .then(function () {     
         window.location.replace('historico/resultado.html?'+chaveQuestio);
     })
-
+});//fim user
     }//retorno
     
 }
-
 
 
 </script>

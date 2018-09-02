@@ -19,27 +19,59 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!--fontawesome-free-5.0.13-->
     <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
-
+<style>
+.conteudo{ margin-top:0px; }
+</style>
 </head>
 <body>
 
-<!--menu-->
-<div class="container conteudo" id="cadernos">
-        <div class="row">
-            <div class="col-lg-2"></div>        
-            <a class="col-lg-4 caderno" href="questionario.html"> 
-                <img src="img/questio.png" width="100%" height="auto">
-                <h5>Começar questionario!</h5>
-            </a>
-            <a class="col-lg-4 caderno" href="historico/index.html">
-                <img src="img/dados-lupa.png" width="100%" height="auto">
-                <h5>Meu Aproveitamento</h5>   
-            </a>
+<div class="container" style="margin-top:120px;">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 style="text-align:center;">Simulados Braga Academy</h1><br><br>
         </div>
     </div>
+</div>
+
+<!--menu-->
+<div id="mostrarlogado"></div>
+<!--menu-->
+
+<!--menu-->
+<div class="container" id="logado"></div>
 <!--menu-->
 
 
+<!--chamando arquivo de funçoes do firebase-->
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<!--chamando a conexão com o firebase-->
+<script src="js/app.js"></script>
+
+<script>
+//mandadndo deslogados para a pagina de login
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario){ 
+        console.log('logado');
+        document.getElementById('logado').style.display = 'none';
+        document.getElementById('mostrarlogado').style.display = 'block';
+        document.getElementById('mostrarlogado').innerHTML = 
+            '<div class="container conteudo" id="cadernos"><div class="row"><div class="col-md-2"></div>'+
+            '<a class="col-md-4 caderno" href="questionario.html"><img src="img/questio.png" width="100%" height="auto">'+
+            '<h5>Começar questionario!</h5></a><a class="col-md-4 caderno" href="historico/index.html">'+
+            '<img src="img/dados-lupa.png" width="100%" height="auto"><h5>Meu Aproveitamento</h5></a></div></div>';
+    }//fim if user
+    else{ 
+        console.log('não logado');
+        document.getElementById('logado').style.display = 'block';
+        document.getElementById('mostrarlogado').style.display = 'none';
+        document.getElementById('logado').innerHTML =
+            '<div class="row"><div class="col-md-3"></div><div class="col-md-6">'+
+            '<a href="cadastro.html"><span class="btn btn-block btn-lg btn-outline-danger"> Primeira vez aqui? Cadastre-se!</span></a><br>'+
+            '<p style="text-align:center;">ou</p></div></div><div class="row"><div class="col-md-3"></div><div class="col-md-6">'+
+            '<a href="login.html"><span class="btn btn-block btn-lg btn-outline-info"> Entre com sua conta!</span></a></div></div>';
+    }//fim else user
+});//fim user
+</script>
 
 </body>
 </html>

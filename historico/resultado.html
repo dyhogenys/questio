@@ -99,9 +99,6 @@
 
 <script>
     
-    const usuario = 'dyhogenys';
-
-
     // questionario na url da pagina
     var url = window.location.href;
     const questionario = url.split("?")[1];
@@ -114,8 +111,11 @@ var carga = 0;
 var disciplinasInfo = [];
 var cont = 1;
 var contadorGeral = 0;
+//usuario
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario){ 
 //listanso questoes respondidas do usuario
-    firebase.database().ref('/usuarios/'+usuario+'/historico/'+questionario+'/questoes/').once("value", function(child) {
+    firebase.database().ref('/usuarios/'+usuario.uid+'/historico/'+questionario+'/questoes/').once("value", function(child) {
         //se questionário não existir
         if (child.exists()){} 
         else{ 
@@ -137,8 +137,6 @@ var contadorGeral = 0;
                 var resNota = eResp.key.toString().replace("res","");
 
                 if (resNota == d.val()){
-                    //console.log(eResp.key);
-                //   console.log('res'+d.val());
                     cert++;
                     document.getElementById('cert').innerHTML = cert;
                 }else{
@@ -146,12 +144,7 @@ var contadorGeral = 0;
                     document.getElementById('erra').innerHTML = erra;
                 }
             }
-
-
     })})
-
-
-
 
 if(cont===1){
     //carregamento
@@ -161,18 +154,12 @@ if(cont===1){
 
 //info
 if(cont === child.numChildren()){
-    firebase.database().ref('/usuarios/'+usuario+'/historico/'+questionario).once("value", function(hist) {
+    firebase.database().ref('/usuarios/'+usuario.uid+'/historico/'+questionario).once("value", function(hist) {
         document.getElementById('infoData').innerHTML = hist.val().datahora;
         document.getElementById('infoTempo').innerHTML = hist.val().tempo;
 
     })
 
-/*
-    var pontos = 10/child.numChildren();
-    var rere =  document.getElementsByClassName('resposta');
-   
-    console.log(rere.length);
-    */
 }
 
 cont++;
@@ -198,6 +185,14 @@ if(itemsProcessed === 0){
 
     //marcando respostas
     var resp = dadosOpc.key.replace("res", "");
+    if(d.val() === 0){
+        if(dadosOpc.key.indexOf("res") != -1){
+        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
+        }else{
+            listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
+        }
+    }
+    else{
     if(resp === d.val()){
         listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
     }else{
@@ -206,6 +201,7 @@ if(itemsProcessed === 0){
     }
     if(dadosOpc.key.indexOf("res") != -1){
         listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
+    }
     }
             itemsProcessed++;
 //depois de terminar de listar as questao retornando lista completa
@@ -273,12 +269,16 @@ console.log('erro: '+ err);
 document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
 })
 
-
 })})
 .catch(function(err) {
 console.log('erro: '+ err);
 document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
 })
+
+}//fim if user
+else{window.location.replace('login.html');}//fim else user
+});//fim user
+
 </script>
 </body>
 </html>

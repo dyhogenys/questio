@@ -5,20 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--titulo-->
     <title>Entrar</title>
-    <!--icone-->
-    <link rel="icon" type="imagem/png" href="../img/logoico.png" />
-    <!--bootstrap css-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <!--animações-->
-    <link rel="stylesheet" type="text/css" href="../css/animate.css">
+	<!--icone-->
+    <link rel="icon" type="ico" href="favicon.ico" />
+	<!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-4.1.1/css/bootstrap.min.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+    <script src="css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+    <script src="js/ajax-jquery-3.3.1.min.js"></script>
+
+	<!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
     <!--css-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
+
     <!--css login/cadastro-->
     <style>
-        body{background-color: #ccc;}
         #mostrarlogado{display:none;}
         .btn{margin: 30px 0 20px 0;}
-        #caixa{background-color: #ffffff; margin: 150px 8px 8px 8px; padding:30px;}
+        #caixa{background-color: #ffffff; margin: 150px 8px 8px 8px; padding:30px; border:1px solid #ccc;}
         #mensagemErro{font-size:16px; text-align:center;color:brown;}
         
         @media only screen and (max-width: 900px) {
@@ -34,7 +40,7 @@
 
         <div class="row centered">
             <div class="col-lg-3"></div>      
-            <div class="col-lg-6 shadow" id="caixa">
+            <div class="col-lg-6" id="caixa">
                 <!--logado-->
                 <div class="text-center">
                     <div id="avisologado"></div>
@@ -57,15 +63,11 @@
                  <div id="mensagemErro"></div>
                 <br>
                 <div class="text-center">
-                <a href="cadastro.html">Cadastre-se </a> |
-                <a href="perdeuasenha.html"> Perdeu a  senha?</a>
-                
+                    <a href="cadastro.html">Cadastre-se </a> |
+                    <a href="perdeuasenha.html"> Perdeu a  senha?</a>
+                </div>
                 <button type="submit" class="btn btn-lg btn-block btn-danger" id="loginButton">ENTRAR</button>
                 </form>
-
-                <div class="text-left">
-                <a href="../index.html" style="text-align: left;">&larr; Página inicial</a><br>
-                </div>
             </div>
             </div>
 
@@ -75,7 +77,7 @@
     <!--chamando arquivo de funçoes do firebase-->
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
     <!--chamando a conexão com o firebase-->
-    <script src="../js/app.js"></script>
+    <script src="js/app.js"></script>
 
     <!--script de login-->
     <script>
@@ -86,26 +88,48 @@
          // impede o envio do form
          e.preventDefault();
 
-        var emailLogin = document.getElementById('emailLogin');
-        var senhaLogin = document.getElementById('senhaLogin');
-        var mensagemErro = document.getElementById('mensagemErro');
-
         //carregando
-        mensagemErro.innerHTML = ('<div class="animated fadeIn">Carregando... <img src="../img/load.gif"/></div>');
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(emailLogin.value, senhaLogin.value)
-            .then(function () {
-               //nada por aqui
-            })
-            .catch(function (error) {
-                //limpando mensagem
-                mensagemErro.innerHTML = ('');
-                //exibindo erro 
-                mensagemErro.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao entrar! Tente novamente...</span></div>');
-                console.log('Erro: ' + error.message);
-            });
-    });
+        var mensagemErro = document.getElementById('mensagemErro');
+        mensagemErro.innerHTML = ('<div class="animated fadeIn">Carregando... <img src="img/load.gif"/></div>');
+
+ //verificando se o usuario está cadastrado no wordpress e possui assinatura
+ var requisicao = 'https://braga.academy/?verify='+emailLogin.value+'&secret=SOMESECRETHERE';
+    $.ajax({
+        url: requisicao, 
+        success: function(result){
+            //usuario nao encontrado
+            if(result == 0){
+                mensagemErro.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Usuário não encontrado!</span></div>');
+            }//usuario sem assinatura
+            else if(result == 1){
+                mensagemErro.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Usuário sem assinatura!</span></div>');
+            }//resposta positiva
+            else{
+                //carregando
+                mensagemErro.innerHTML = ('<div class="alert alert-success"><span class="animated fadeIn">Usuário confirmado... <img src="img/load.gif"/></span></div>');
+
+
+                var emailLogin = document.getElementById('emailLogin');
+                var senhaLogin = document.getElementById('senhaLogin');
+
+                firebase.auth().signInWithEmailAndPassword(emailLogin.value, senhaLogin.value)
+                    .then(function () {
+                    //nada por aqui
+                    })
+                    .catch(function (error) {
+                        //exibindo erro 
+                        mensagemErro.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao entrar! Tente novamente...</span></div>');
+                        console.log(error.message);
+                    });
+
+            }//fim else            
+        },//fim sucesso ajax
+        //erro no ajax
+        error: function (erro) {
+            mensagemErro.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao verificar email!</span></div>');
+            console.log(erro); }
+        });//fim ajax
+    });//fim formulario
 
     //escondendo e exibindo mensagem para logados
     var avisologado = document.getElementById('avisologado');
@@ -121,7 +145,7 @@
             '<small>Você será redirecionado em 3 segundos...</small><br>' +
             '<a href="../index.html">&larr; Página inicial</a>');
         document.getElementById("caixa").style.marginTop = "150px";
-        setTimeout("window.history.go(-1)",3000);
+        setTimeout("window.location.replace('index.html')",3000);
         
     } else{console.log('não logado');}
     });
