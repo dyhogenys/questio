@@ -4,7 +4,7 @@
 	<meta charset="UTF-8"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--titulo-->
-	<title>Questões</title>
+	<title>Visão Geral</title>
 	<!--icone-->
     <link rel="icon" type="ico" href="../favicon.ico" />
 	<!--bootstrap-->
@@ -141,17 +141,17 @@ var erradas = document.getElementById('erra');
 
 
 
-var usuario = 'UO2mKZ5CnVNie4NM52inlIl6qfC2';
-
 //variaveis de processamento
 tques = 0; cert = 0; erra = 0;
 
 //contadores
 contquestio = 0;
 
-
-firebase.database().ref('/usuarios/'+usuario).once("value").then(function(usua) {
-firebase.database().ref('/usuarios/'+usuario+'/historico/').once("value").then(function(hist) {
+//usuario
+firebase.auth().onAuthStateChanged(usuario => {
+    if(usuario){ 
+firebase.database().ref('/usuarios/'+usuario.uid).once("value").then(function(usua) {
+firebase.database().ref('/usuarios/'+usuario.uid+'/historico/').once("value").then(function(hist) {
 firebase.database().ref('/questoes/').once("value").then(function(que) {
 
     quesTotal.innerHTML = que.numChildren();//total de questoes no banco de dados
@@ -196,6 +196,9 @@ opc.forEach(function (opcEach) {
 
 })// fim questoes
 })})})})})//fim usuarios
+}//fim if user
+else{window.location.replace('../login.html');}//fim else user
+});//fim user
 </script>
 </body>
 </html>
