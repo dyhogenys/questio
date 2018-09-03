@@ -147,7 +147,6 @@
 //mandando deslogados e não administradores para a pagina principal
 firebase.auth().onAuthStateChanged(usuario => {
     if(usuario && usuario.uid === 'QfQCcZeym5gJzAVTZyKGff7PzTJ3'){ 
-        console.log('sdfadsa');
      }//fim if user
     else{window.location.replace('../');}//fim else user
 });//fim user
@@ -217,9 +216,9 @@ var valor = document.getElementsByName(name);
 var radio = document.getElementsByName(seletor);
 for (i=0; i<valor.length; i++) {
     if(radio[i].checked){
-        result[i+'res'] = valor[i].value;
+        result[i+1+'res'] = valor[i].value;
     }
-    else{result[i] = valor[i].value;}
+    else{result[i+1] = valor[i].value;}
 }return result;}
 
 //função excluir opcoes

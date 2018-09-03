@@ -109,7 +109,7 @@ firebase.auth().onAuthStateChanged(usuario => {
     var perc = parseInt(carrega)+ '%';
     document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">'+perc+'</p>'
     }else{
-    document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo!</p>'
+    document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo</p>'
     setTimeout(() => {
         document.getElementById('carregamento').style.display = 'none';
         document.getElementById('corpo').className = 'animated fadeIn';
@@ -118,7 +118,7 @@ firebase.auth().onAuthStateChanged(usuario => {
     }
     }).catch(function(err) {
     console.log('erro: '+ err);
-    document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
+    document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>'
     })
 }//fim if user
 else{window.location.replace('../login.html');}//fim else user

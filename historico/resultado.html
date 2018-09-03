@@ -67,15 +67,15 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="div-info" style="background-color: rgba(0, 128, 0, 0.5);">
-                        <span id="cert" class="num">0</span><br>
-                        <span>questões corretas</span>
+                    <div class="div-info" style="background-color: rgba(255, 0, 0, 0.5);"> 
+                        <span id="tuti" class="num">0</span><br>
+                        <span>questões</span>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="div-info" style="background-color: rgba(255, 0, 0, 0.5);"> 
-                        <span id="erra" class="num">0</span><br>
-                        <span>questões erradas</span>
+                    <div class="div-info" style="background-color: rgba(0, 128, 0, 0.5);">
+                        <span id="cert" class="num">0</span><br>
+                        <span>questões corretas</span>
                     </div>
                 </div>
             </div>
@@ -127,25 +127,6 @@ firebase.auth().onAuthStateChanged(usuario => {
 //listando questoes
  firebase.database().ref('/questoes/'+d.key).once("value").then(function(dados) {
 
-
-    //certas erradas
-    cert = 0; erra = 0;
-    firebase.database().ref('/questoes/'+d.key+'/opcoes/').once("value").then(function(dResp) {
-    dResp.forEach(function (eResp) { 
-
-            if(eResp.key.indexOf("res") != -1){
-                var resNota = eResp.key.toString().replace("res","");
-
-                if (resNota == d.val()){
-                    cert++;
-                    document.getElementById('cert').innerHTML = cert;
-                }else{
-                    erra++;
-                    document.getElementById('erra').innerHTML = erra;
-                }
-            }
-    })})
-
 if(cont===1){
     //carregamento
     totalcarga = (child.numChildren());
@@ -167,13 +148,18 @@ cont++;
 //colocando questoes em uma string
 var itemsProcessed = 0;
 var listando = [];
-var i,p, n, tmp; arr = [];
+var i,p, n, tmp;
+certas = 0; certMult = 0; resMult = 0;
+var cert = document.getElementById('cert');
+var tuti = document.getElementById('tuti');
+
 firebase.database().ref('/questoes/'+d.key+'/opcoes/').once("value", function(childOpc) {
 childOpc.forEach(function (g) {
 firebase.database().ref('/questoes/'+d.key+'/opcoes/'+g.key).once("value", function(dadosOpc) {
 
 //gerando numeros aleatorios para as opcoes
 if(itemsProcessed === 0){
+    arr = [];
     for (i = 0; i < childOpc.numChildren(); i++) {arr[i] = i;}
     for (p = arr.length; p;) {
         n = Math.random() * p-- | 0;
@@ -181,48 +167,60 @@ if(itemsProcessed === 0){
         arr[n] = arr[p];
         arr[p] = tmp;
     }
-}else{}
+}
 
     //marcando respostas
     var resp = dadosOpc.key.replace("res", "");
-    if(d.val() === 0){
-        if(dadosOpc.key.indexOf("res") != -1){
-        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
-        }else{
-            listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
-        }
-    }
-    else{
-    if(resp === d.val()){
-        listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
-    }else{
-        //criando lista de questoes
-        listando[itemsProcessed] = ('<li>'+dadosOpc.val()+'</li>');
-    }
-    if(dadosOpc.key.indexOf("res") != -1){
-        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
-    }
-    }
-            itemsProcessed++;
-//depois de terminar de listar as questao retornando lista completa
+    //criando lista de questoes
+    listando[itemsProcessed] = ('<li>'+dadosOpc.val()+'</li>');
 
+    if(dadosOpc.key.indexOf("res") != -1){ resMult++; /*console.log(resMult) */}//contando numero de respostas em uma questão multipla escolha
+
+    //marcando respostas do usuario em múltiplas escolhas
+    if(dados.val().tipo === 'checkbox'){ 
+        userMult = d.val().split("-");;
+    for (var h = 0; h < userMult.length; h++) {
+            if(resp === userMult[h]){
+                listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');//resposta usuario multiplas escolhas    
+                if(dadosOpc.key.indexOf("res") != -1){ certMult++; }//contando opcoes corretas
+    }   }   }
+
+    if(d.val() === 0){//não respondeu
+        listando[itemsProcessed] = ('<li class="sem-resposta">'+dadosOpc.val()+'</li>');
+    }
+    if(resp === d.val()){//respondeu 
+        listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
+    }
+    if(dadosOpc.key.indexOf("res") != -1){//resposta correta
+        if(dados.val().tipo === 'radio'){ if(resp === d.val()){ certas++; } }//contando corretas radio
+        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');//marcando respostas corretas
+    }
+    
+            itemsProcessed++;
+
+
+//retornando lista completa
 if(itemsProcessed === childOpc.numChildren()) {
     contadorGeral++;
+
+    if( certMult === resMult ){ certas++; }//pontuação multiplas escolhas
+    resMult = 0; certMult = 0;//resetando contadores
 
     //embaralhando opções
     var listaOpc;
     for (var i = 0; i < childOpc.numChildren(); i++) {
-        if(i==0){
-            listaOpc = listando[arr[i]];
-        }else{
-            listaOpc += listando[arr[i]];
-        }
+        if(i==0){ listaOpc = listando[arr[i]]; }
+        else{ listaOpc += listando[arr[i]]; }
     }
 
     //chamando função passando as opções em string
     listaQuestoes(listaOpc, contadorGeral);
     car++;
 }else{car++;}
+
+
+cert.innerHTML = certas;//imprimindo certas
+tuti.innerHTML = child.numChildren();//imprimindo total de questoes
 
 //carregamento
 carrega += carga;
@@ -234,7 +232,7 @@ if (car<totalcarga){
   var perc = parseInt(carrega)+ '%';
   document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">'+perc+'</p>'
 }else{
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo!</p>'
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo</p>'
 setTimeout(() => {
     document.getElementById('carregamento').style.display = 'none';
     document.getElementById('corpo').className = 'animated fadeIn';
@@ -244,13 +242,15 @@ setTimeout(() => {
 }).catch(function(err) {
 console.log('item: '+ itemsProcessed);
 console.log('erro: '+ err);
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>'
 })
 })//foreach
 })  .catch(function(err) {
 console.log('erro: '+ err);
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>'
 })
+
+
 //imprimindo questoes
 function listaQuestoes(opc, contador) {
 
@@ -259,20 +259,22 @@ function listaQuestoes(opc, contador) {
 var div = document.createElement('div');
 div.innerHTML = (
     '<div class="row caixa"><div class="col-lg-12"><span class="titdisciplina">'+dados.val().disciplina+'</span></div>'+
-    '<div class="col-lg-12"><div class="text-left pergunta">'+numQue+'. '+dados.val().pergunta+'</div><br><ol>'+opc+'</ol></div></div>'
+    '<div class="col-lg-12"><div class="text-left pergunta">'+numQue+'. '+dados.val().pergunta+'</div><ol>'+opc+'</ol></div></div>'
 );
 conteudo.appendChild(div);
 }
 
+
+
 }).catch(function(err) {
 console.log('erro: '+ err);
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>'
 })
 
 })})
 .catch(function(err) {
 console.log('erro: '+ err);
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>' 
 })
 
 }//fim if user

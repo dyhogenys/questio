@@ -47,7 +47,6 @@
 //mandando deslogados e não administradores para a pagina principal
 firebase.auth().onAuthStateChanged(usuario => {
     if(usuario && usuario.uid === 'QfQCcZeym5gJzAVTZyKGff7PzTJ3'){ 
-        console.log('sdfadsa');
      }//fim if user
     else{window.location.replace('../');}//fim else user
 });//fim user
@@ -88,12 +87,12 @@ for (j=0; j<(total+1); j++) {
         })
         .catch(function(err) {
             console.log('erro ao enviar: '+err);
-            document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro!</div></div>'
+            document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro</div></div>'
         })
 
 
 }) .catch(function(err) {
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro!</div></div>'
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">erro</div></div>'
     })
 }
 

@@ -48,7 +48,6 @@
 //mandando deslogados e não administradores para a pagina principal
 firebase.auth().onAuthStateChanged(usuario => {
     if(usuario && usuario.uid === 'QfQCcZeym5gJzAVTZyKGff7PzTJ3'){ 
-        console.log('sdfadsa');
      }//fim if user
     else{window.location.replace('../');}//fim else user
 });//fim user

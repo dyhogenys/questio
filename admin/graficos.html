@@ -98,18 +98,17 @@
 //mandando deslogados e não administradores para a pagina principal
 firebase.auth().onAuthStateChanged(usuario => {
     if(usuario && usuario.uid === 'QfQCcZeym5gJzAVTZyKGff7PzTJ3'){ 
-        console.log('sdfadsa');
      }//fim if user
     else{window.location.replace('../');}//fim else user
 });//fim user
 
-    const usuario = 'dyhogenys';
+
 
 contquestio = 0;
 contquestUser = 0;
 
 firebase.database().ref('/questoes/').once("value", function(contQuest) { //questoes
-    firebase.database().ref('/usuarios/'+usuario+'/historico/').once("value", function(userQuestio) {//questionarios
+    firebase.database().ref('/usuarios/'+usuario.uid+'/historico/').once("value", function(userQuestio) {//questionarios
     
  
 

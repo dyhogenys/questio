@@ -269,7 +269,6 @@
 //mandando deslogados e não administradores para a pagina principal
 firebase.auth().onAuthStateChanged(usuario => {
     if(usuario && usuario.uid === 'QfQCcZeym5gJzAVTZyKGff7PzTJ3'){ 
-        console.log('sdfadsa');
      }//fim if user
     else{window.location.replace('../');}//fim else user
 });//fim user
@@ -325,6 +324,7 @@ firebase.database().ref('/questoes/').once("value").then(function(child) {
 
         //gerando numeros aleatorios para as opcoes
         if(itemsProcessed === 0){
+            arr = [];
             for (i = 0; i < childOpc.numChildren(); i++) {arr[i] = i;}
             for (p = arr.length; p;) {
                 n = Math.random() * p-- | 0;
@@ -349,11 +349,8 @@ firebase.database().ref('/questoes/').once("value").then(function(child) {
             //embaralhando opções
             var listaOpc;
             for (var i = 0; i < childOpc.numChildren(); i++) {
-                if(i==0){
-                    listaOpc = listando[arr[i]];
-                }else{
-                    listaOpc += listando[arr[i]];
-                }
+                if(i==0){ listaOpc = listando[arr[i]]; }
+                else{ listaOpc += listando[arr[i]]; }
             }
 
             //chamando função passando as opções em string
@@ -371,7 +368,7 @@ firebase.database().ref('/questoes/').once("value").then(function(child) {
           var perc = parseInt(carrega)+ '%';
           document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">'+perc+'</p>'
       }else{
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo!</p>'
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo</p>'
         setTimeout(() => {
             document.getElementById('carregamento').style.display = 'none';
             document.getElementById('corpo').className = 'animated fadeIn';
@@ -381,12 +378,12 @@ firebase.database().ref('/questoes/').once("value").then(function(child) {
     }).catch(function(err) {
         console.log('item: '+ itemsProcessed);
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>'
     })
 })//foreach
 })  .catch(function(err) {
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>' 
     })
 //imprimindo questoes
 function listaQuestoes(opc) {
@@ -394,7 +391,7 @@ function listaQuestoes(opc) {
     var div = document.createElement('div');
     div.innerHTML = (
         '<div class="row caixa" id="'+dados.key+'"><div class="col-lg-11 latesq"><div class="text-right"><small class="chave">'+dados.key+'</small></div>'+
-        '<div class="text-left pergunta">'+dados.val().pergunta+'</div><ol class="acharopc">'+opc+'</ol></div><div class="col-lg-1 latdir-caixa"><span class="titdisciplina">'+dados.val().disciplina+'</span>'+
+        '<div class="text-left pergunta"><i class="far fa-dot-circle" style="font-size:13px;"></i> '+dados.val().pergunta+'</div><ol class="acharopc">'+opc+'</ol></div><div class="col-lg-1 latdir-caixa"><span class="titdisciplina">'+dados.val().disciplina+'</span>'+
         '<div class="latdir"><i class="fas fa-pencil-alt" data-toggle="modal" data-target=".editarmodal" onclick="editar(/'+dados.key+'/);"></i>'+
         '<i class="far fa-trash-alt" onclick="excluirQuestao(/'+dados.key+'/);"></i></div></div></div>'
         );
@@ -403,12 +400,12 @@ function listaQuestoes(opc) {
 
 }).catch(function(err) {
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>' 
     })
 })//foreach
 }).catch(function(err) {
         console.log('erro: '+ err);
-        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
+        document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>' 
     })
 
 function excluirQuestao(param) {

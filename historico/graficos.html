@@ -151,7 +151,7 @@ contquestio = 0;
 firebase.auth().onAuthStateChanged(usuario => {
     if(usuario){ 
 firebase.database().ref('/usuarios/'+usuario.uid).once("value").then(function(usua) {
-firebase.database().ref('/usuarios/'+usuario.uid+'/historico/').once("value").then(function(hist) {
+firebase.database().ref('/usuarios/'+usuario.uid+'/historico').once("value").then(function(hist) {
 firebase.database().ref('/questoes/').once("value").then(function(que) {
 
     quesTotal.innerHTML = que.numChildren();//total de questoes no banco de dados
@@ -159,7 +159,7 @@ firebase.database().ref('/questoes/').once("value").then(function(que) {
 
 hist.forEach(function (histEach) {
     contquestio++;
-firebase.database().ref('/usuarios/'+usuario+'/historico/'+histEach.key+'/questoes/').once("value").then(function(histOpc) {
+firebase.database().ref('/usuarios/'+usuario.uid+'/historico/'+histEach.key+'/questoes/').once("value").then(function(histOpc) {
 
     tques += histOpc.numChildren();
     if(contquestio===hist.numChildren()){

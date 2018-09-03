@@ -4,7 +4,7 @@
 	<meta charset="UTF-8"> 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--titulo-->
-	<title>Questões</title>
+	<title>Todas as Questões</title>
 	<!--icone-->
     <link rel="icon" type="ico" href="../favicon.ico" />
 	<!--bootstrap-->
@@ -163,28 +163,6 @@ firebase.database().ref('/usuarios/'+usuario.uid+'/historico/').once("value", fu
 //listando questoes
  firebase.database().ref('/questoes/'+d.key).once("value").then(function(dados) {
 
-    //certas erradas
-    cert = 0; erra = 0;
-    firebase.database().ref('/questoes/'+d.key+'/opcoes/').once("value").then(function(dResp) {
-    dResp.forEach(function (eResp) { 
-
-            if(eResp.key.indexOf("res") != -1){
-                var resNota = eResp.key.toString().replace("res","");
-
-                if (resNota == d.val()){
-                    //console.log(eResp.key);
-                //   console.log('res'+d.val());
-                    cert++;
-                    document.getElementById('cert').innerHTML = cert;
-                }else{
-                    erra++;
-                    document.getElementById('erra').innerHTML = erra;
-                }
-            }
-
-
-    })})
-
 
 if(cont===1){
     //carregamento
@@ -211,13 +189,18 @@ cont++;
 //colocando questoes em uma string
 var itemsProcessed = 0;
 var listando = [];
-var i,p, n, tmp; arr = [];
+var i,p, n, tmp;
+certas = 0; certMult = 0; resMult = 0;
+var cert = document.getElementById('cert');
+var erra = document.getElementById('erra');
+
 firebase.database().ref('/questoes/'+d.key+'/opcoes/').once("value", function(childOpc) {
 childOpc.forEach(function (g) {
 firebase.database().ref('/questoes/'+d.key+'/opcoes/'+g.key).once("value", function(dadosOpc) {
 
 //gerando numeros aleatorios para as opcoes
 if(itemsProcessed === 0){
+    arr = [];
     for (i = 0; i < childOpc.numChildren(); i++) {arr[i] = i;}
     for (p = arr.length; p;) {
         n = Math.random() * p-- | 0;
@@ -229,27 +212,38 @@ if(itemsProcessed === 0){
 
     //marcando respostas
     var resp = dadosOpc.key.replace("res", "");
-    if(d.val() === 0){
-        if(dadosOpc.key.indexOf("res") != -1){
-        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
-        }else{
-            listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
-        }
+    //criando lista de questoes
+    listando[itemsProcessed] = ('<li>'+dadosOpc.val()+'</li>');
+
+    if(dadosOpc.key.indexOf("res") != -1){ resMult++; /*console.log(resMult) */}//contando numero de respostas em uma questão multipla escolha
+
+    //marcando respostas do usuario em múltiplas escolhas
+    if(dados.val().tipo === 'checkbox'){ 
+        userMult = d.val().split("-");;
+    for (var h = 0; h < userMult.length; h++) {
+            if(resp === userMult[h]){
+                listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');//resposta usuario multiplas escolhas    
+                if(dadosOpc.key.indexOf("res") != -1){ certMult++; }//contando opcoes corretas
+    }   }   }
+
+    if(d.val() === 0){//não respondeu
+        listando[itemsProcessed] = ('<li class="sem-resposta">'+dadosOpc.val()+'</li>');
     }
-    else{
-    if(resp === d.val()){
+    if(resp === d.val()){//respondeu 
         listando[itemsProcessed] = ('<li class="resposta-user">'+dadosOpc.val()+'</li>');
-    }else{
-        //criando lista de questoes
-        listando[itemsProcessed] = ('<li>'+dadosOpc.val()+'</li>');
     }
-    if(dadosOpc.key.indexOf("res") != -1){
-        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');
+    if(dadosOpc.key.indexOf("res") != -1){//resposta correta
+        if(dados.val().tipo === 'radio'){ if(resp === d.val()){ certas++; } }//contando corretas radio
+        listando[itemsProcessed] = ('<li class="resposta">'+dadosOpc.val()+'</li>');//marcando respostas corretas
     }
-    }
+    
             itemsProcessed++;
 //depois de terminar de listar as questao retornando lista completa
 if(itemsProcessed === childOpc.numChildren()) {
+
+    if( certMult === resMult ){ certas++; }//pontuação multiplas escolhas
+    resMult = 0; certMult = 0;//resetando contadores
+
     //embaralhando opções
     var listaOpc;
     for (var i = 0; i < childOpc.numChildren(); i++) {
@@ -265,6 +259,10 @@ if(itemsProcessed === childOpc.numChildren()) {
     car++;
 }else{car++;}
 
+
+cert.innerHTML = certas;//imprimindo certas
+erra.innerHTML = child.numChildren() - certas;//imprimindo total de questoes
+
 //carregamento
 carrega += carga;
 
@@ -275,7 +273,7 @@ if (car<totalcarga){
   var perc = parseInt(carrega)+ '%';
   document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar" role="progressbar" style="width:'+perc+'" aria-valuenow="'+perc+'" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">'+perc+'</p>'
 }else{
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo!</p>'
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-success" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">completo</p>'
 setTimeout(() => {
 
     //calculo de media provisorio
@@ -295,12 +293,12 @@ setTimeout(() => {
 }).catch(function(err) {
 console.log('item: '+ itemsProcessed);
 console.log('erro: '+ err);
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>'
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>'
 })
 })//foreach
 })  .catch(function(err) {
 console.log('erro: '+ err);
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>' 
 })
 //imprimindo questoes
 function listaQuestoes(opc) {
@@ -308,14 +306,14 @@ function listaQuestoes(opc) {
 var div = document.createElement('div');
 div.innerHTML = (
     '<div class="row caixa"><div class="col-lg-12 text-right"><span class="titdisciplina">'+dados.val().disciplina+'</span></div>'+
-    '<div class="col-lg-12"><div class="text-left pergunta">'+dados.val().pergunta+'</div><ol class="acharopc">'+opc+'</ol></div></div>'
+    '<div class="col-lg-12"><div class="text-left pergunta"><i class="far fa-dot-circle" style="font-size:13px;"></i> '+dados.val().pergunta+'</div><ol class="acharopc">'+opc+'</ol></div></div>'
 );
 conteudo.appendChild(div);
 }
 
 }).catch(function(err) {
 console.log('erro: '+ err);
-document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro!</p>' 
+document.getElementById('carregamento').innerHTML = '<div class="progress"><div class="progress-bar bg-danger" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div><p style="text-align:center;">erro</p>' 
 })
 
 })})})})

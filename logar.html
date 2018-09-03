@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--titulo-->
+    <title>Entrar</title>
+	<!--icone-->
+    <link rel="icon" type="ico" href="favicon.ico" />
+	<!--bootstrap-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-4.1.1/css/bootstrap.min.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+    <script src="css/bootstrap-4.1.1/js/bootstrap.min.js"></script>
+    <script src="js/ajax-jquery-3.3.1.min.js"></script>
+
+	<!--Animate.css-->
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <!--css-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <!--fontawesome-free-5.0.13-->
+    <link rel="stylesheet" href="css/font-awesome/css/fontawesome-all.min.css">
+
+    <!--css login/cadastro-->
+    <style>
+        #mostrarlogado{display:none;}
+        .btn{margin: 30px 0 20px 0;}
+        #caixa{background-color: #ffffff; margin: 150px 8px 8px 8px; padding:30px; border:1px solid #ccc;}
+        #mensagemErro{font-size:16px; text-align:center;color:brown;}
+        
+        @media only screen and (max-width: 900px) {
+            #caixa {margin-top:8px!important;}
+        }
+    </style>
+</head>
+
+<body class="animeted fadeIn">
+
+   
+    <div class="container">
+
+        <div class="row centered">
+            <div class="col-lg-3"></div>      
+            <div class="col-lg-6" id="caixa">
+                <!--logado-->
+                <div class="text-center">
+                    <div id="avisologado"></div>
+                    <a href=""  id="sairButton" ><span id="mostrarlogado" class="btn btn-danger">Sair</span></a> 
+                </div>
+            <!--cadastro-->
+            <div id="logado" >
+                <h1 class="text-center" style="margin-top: 20px;">Entre com sua conta</h1><br>
+                
+                <form id="formulario">
+                    <div class="form-group">
+                        <label for="emailLogin">E-mail*</label>
+                        <input type="email" class="form-control" id="emailLogin" required="" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="senhaLogin">Senha*</label>
+                        <input type="password" class="form-control" id="senhaLogin" required="">
+                    </div>
+                 <!--mensagem de erro-->
+                 <div id="mensagemErro"></div>
+                <br>
+                <div class="text-center">
+                    <a href="cadastro.html">Cadastre-se </a> |
+                    <a href="perdeuasenha.html"> Perdeu a  senha?</a>
+                </div>
+                <button type="submit" class="btn btn-lg btn-block btn-danger" id="loginButton">ENTRAR</button>
+                </form>
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--chamando arquivo de funçoes do firebase-->
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <!--chamando a conexão com o firebase-->
+    <script src="js/app.js"></script>
+
+    <!--script de login-->
+    <script>
+    var formulario = document.getElementById('formulario');
+    
+
+    formulario.addEventListener('submit', function (e) {
+         // impede o envio do form
+         e.preventDefault();
+
+        //carregando
+        var mensagemErro = document.getElementById('mensagemErro');
+        mensagemErro.innerHTML = ('<div class="animated fadeIn">Carregando... <img src="img/load.gif"/></div>');
+
+
+
+                var emailLogin = document.getElementById('emailLogin');
+                var senhaLogin = document.getElementById('senhaLogin');
+
+                firebase.auth().signInWithEmailAndPassword(emailLogin.value, senhaLogin.value)
+                    .then(function () {
+                    //nada por aqui
+                    })
+                    .catch(function (error) {
+                        //exibindo erro 
+                        mensagemErro.innerHTML = ('<div class="alert alert-danger"><span class="animated flash">Falha ao entrar! Tente novamente...</span></div>');
+                        console.log(error.message);
+                    });
+
+   
+    });//fim formulario
+
+    //escondendo e exibindo mensagem para logados
+    var avisologado = document.getElementById('avisologado');
+    var sairButton = document.getElementById('sairButton');
+
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+    if(firebaseUser){
+        console.log(firebaseUser);
+        document.getElementById('logado').style.display = 'none';
+        document.getElementById('mostrarlogado').style.display = 'block';
+        avisologado.innerHTML = (
+            '<span style="padding-top:50px;">Você está conectado :-)</span><br>' +
+            '<small>Você será redirecionado em 3 segundos...</small><br>' +
+            '<a href="../index.html">&larr; Página inicial</a>');
+        document.getElementById("caixa").style.marginTop = "150px";
+        setTimeout("window.location.replace('index.html')",3000);
+        
+    } else{console.log('não logado');}
+    });
+
+    //sair
+    sairButton.addEventListener('click', function () {
+    firebase
+    .auth()
+    .signOut()
+    .then(function() {
+        location.reload();
+    })
+    .catch(function(error) {
+        console.error(error.message);
+        alert('Falha ao sair')
+    });
+    });
+    </script>
+
+</body>
+
+</html>

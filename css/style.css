@@ -84,15 +84,19 @@ a:hover{
 .resposta{
     list-style:none;
     list-style-image:url(../img/check.png);
-   /* background-color: rgba(29, 141, 29, 0.72);
-    color: #fff;*/
+    background-color: rgba(128, 191, 128, 0.8);
+   /* color: #fff;*/
 }
 .resposta-user{
     list-style:none;
     list-style-image:url(../img/check-user.png);
-   /* background-color:tomato;
-    color: #fff;*/
+    background-color:rgba(255, 99, 71, 0.527);
+    /*color: #fff;*/
 }
+.sem-resposta{
+    background-color:rgba(255, 255, 106, 0.459) !important;
+}
+
 #procurar {
     background-image: url(../img/search.png);
     background-position: 10px 12px;
@@ -125,6 +129,7 @@ ol{
 #corpo{ display:none; }
 .pointer{ cursor: pointer; }
 
+.pergunta{ margin-bottom:15px; }
 .pergunta > p { display: inline; }
 .pergunta > h1 { display: inline; }
 .pergunta > h2 { display: inline; }
@@ -162,7 +167,7 @@ ol{
 .corpo-questao{
     padding:0 35px;
 }
-#mensagemTempo{
+.mensagemTempo{
     display: none;
     color:red;
     text-align: center;
@@ -268,9 +273,6 @@ ol{
     margin-top: 30px;
 }
 /*fim questionario*/
-.caderno1{
-    margin-left:-20px;
-}
 
 /*bootstrap*/
 @media screen and (max-width: 768px) {
