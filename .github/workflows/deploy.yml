@@ -1,0 +1,30 @@
+name: 🚀 Deploy Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  deploy:
+    uses: dyhogenys/action-release/.github/workflows/release.yml@main
+    with:
+      branch: ${{ github.ref_name }}
+      repo_name: ${{ github.repository }}
+
+      file:
+      release_as:
+
+      remote_path: "/public_html/libs/"
+      remote_path_dev:
+      remote_path_update:
+
+      ftp_servers_develop: > 
+        suporte@universo.laboratorioead.com
+      ftp_servers_production: >
+      ftp_servers_update: >
+
+    secrets:
+      FTP_SERVERS: ${{ secrets.FTP_SERVERS }}
+      RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
