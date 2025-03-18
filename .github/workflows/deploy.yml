@@ -11,9 +11,11 @@ jobs:
     uses: dyhogenys/action-release/.github/workflows/release.yml@main
     with:
       branch: ${{ github.ref_name }}
-      repo_name: ${{ github.repository }}
+      repo: ${{ github.repository }}
 
-      file:
+      approve_pr: "true"
+
+      version_file:
       release_as:
 
       remote_path: "/public_html/libs/"
